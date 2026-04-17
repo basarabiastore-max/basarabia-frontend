@@ -108,6 +108,31 @@ export default function Home() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // ── Sound: sync video mute state with the global sound toggle ─────────────
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    // Apply persisted preference immediately on mount
+    if (localStorage.getItem('basarabia_sound_enabled') === 'true') {
+      video.volume = 1
+      video.muted  = false
+    }
+
+    const onSoundChange = (e) => {
+      if (!videoRef.current) return
+      if (e.detail.enabled) {
+        videoRef.current.volume = 1
+        videoRef.current.muted  = false
+      } else {
+        videoRef.current.muted = true
+      }
+    }
+
+    window.addEventListener('basarabia:sound-change', onSoundChange)
+    return () => window.removeEventListener('basarabia:sound-change', onSoundChange)
+  }, [])
+
   return (
     <div style={{ margin: 0, padding: 0, backgroundColor: '#000' }}>
 
@@ -150,7 +175,26 @@ export default function Home() {
           autoPlay
           muted
           playsInline
-          onEnded={() => setVideoEnded(true)}
+          onEnded={() => {
+            setVideoEnded(true)
+            const video = videoRef.current
+            if (!video || video.muted) return
+            // Fade audio out over 3 seconds, then silence
+            const startVol = video.volume
+            const start    = performance.now()
+            const tick = (now) => {
+              if (!videoRef.current || videoRef.current.muted) return
+              const t = Math.min((now - start) / 3000, 1)
+              videoRef.current.volume = startVol * (1 - t)
+              if (t < 1) {
+                requestAnimationFrame(tick)
+              } else {
+                videoRef.current.muted  = true
+                videoRef.current.volume = 1
+              }
+            }
+            requestAnimationFrame(tick)
+          }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7, ease: 'easeIn' }}
