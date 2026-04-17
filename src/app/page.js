@@ -358,17 +358,22 @@ export default function Home() {
           opacity: 0,
         }} />
 
-        {/* ── SCROLL INDICATOR ──────────────────────────────────────────────── */}
-        <div style={{
-          position: 'absolute',
-          bottom: '25px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 10,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-        }}>
+        {/* ── SCROLL INDICATOR — hidden once CTA appears ────────────────────── */}
+        <motion.div
+          animate={{ opacity: videoEnded ? 0 : 1 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
+          style={{
+            position: 'absolute',
+            bottom: '25px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 10,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            pointerEvents: 'none',
+          }}
+        >
           <span style={{
             color: '#D4A017',
             fontSize: '0.6rem',
@@ -383,7 +388,7 @@ export default function Home() {
             margin: '8px auto 0',
             animation: 'scrollPulse 1.5s ease-in-out infinite',
           }} />
-        </div>
+        </motion.div>
 
         {/* Gold top strip */}
         <div style={{
