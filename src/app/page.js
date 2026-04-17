@@ -153,7 +153,7 @@ export default function Home() {
           onEnded={() => setVideoEnded(true)}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 1.5, ease: 'easeIn' }}
+          transition={{ duration: 0.7, ease: 'easeIn' }}
           style={{
             position: 'absolute',
             right: '2%',
