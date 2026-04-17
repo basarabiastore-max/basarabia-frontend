@@ -221,7 +221,7 @@ export default function Home() {
             WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 18% 100%)',
           }}
         >
-          <source src="/olguta.mp4" type="video/mp4" />
+          <source src="/olguta2.mp4" type="video/mp4" />
         </motion.video>
 
         {/* ── LEFT EDGE GRADIENT ─────────────────────────────────────────────── */}
