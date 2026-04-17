@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
 import Link from 'next/link'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -399,6 +399,9 @@ export default function Home() {
 
       </section>
 
+      {/* ── BRAND MANIFESTO ───────────────────────────────────────────────── */}
+      <Manifesto />
+
       {/* ── SECTION 2 — Why Us ─────────────────────────────────────────────── */}
       <section style={{
         backgroundColor: '#0a0a0a',
@@ -474,5 +477,90 @@ export default function Home() {
       <Footer />
 
     </div>
+  )
+}
+
+// ── BRAND MANIFESTO ────────────────────────────────────────────────────────
+function ManifestoLine({ children, delay, style = {} }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { once: true, margin: '-80px' })
+
+  return (
+    <motion.p
+      ref={ref}
+      initial={{ opacity: 0, y: 20 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 1.2, delay, ease: [0.22, 1, 0.36, 1] }}
+      style={style}
+    >
+      {children}
+    </motion.p>
+  )
+}
+
+function Manifesto() {
+  const base = {
+    margin: 0,
+    fontFamily: 'Georgia, "Times New Roman", serif',
+    textAlign: 'center',
+    lineHeight: 1.9,
+  }
+
+  return (
+    <section style={{
+      backgroundColor: '#000',
+      width: '100%',
+      padding: 'clamp(120px, 14vw, 200px) clamp(1.5rem, 5vw, 4rem)',
+    }}>
+      <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+
+        {/* Line 1 — prominent */}
+        <ManifestoLine delay={0} style={{
+          ...base,
+          color: '#F5E6C8',
+          fontSize: 'clamp(1.25rem, 3vw, 1.9rem)',
+          fontFamily: 'var(--font-cinzel), "Palatino Linotype", Georgia, serif',
+          fontWeight: 700,
+          letterSpacing: '0.04em',
+          marginBottom: 'clamp(2rem, 4vw, 3rem)',
+          textShadow: '0 0 40px rgba(212,160,23,0.2)',
+        }}>
+          Basarabia nu e doar un magazin.
+        </ManifestoLine>
+
+        {/* Block 2 */}
+        <ManifestoLine delay={0.8} style={{
+          ...base,
+          color: '#A8957A',
+          fontSize: 'clamp(0.95rem, 1.9vw, 1.15rem)',
+          marginBottom: 'clamp(2rem, 4vw, 3rem)',
+        }}>
+          E memoria unui gust. E drumul spre casă,<br />
+          păstrat într-un borcan, într-o pâine,<br />
+          într-o bucată de brânză.
+        </ManifestoLine>
+
+        {/* Line 3 */}
+        <ManifestoLine delay={1.6} style={{
+          ...base,
+          color: '#A8957A',
+          fontSize: 'clamp(0.95rem, 1.9vw, 1.15rem)',
+          marginBottom: '0.6rem',
+        }}>
+          Am adus cămara bunicii tale în Anglia —
+        </ManifestoLine>
+
+        {/* Line 4 — italic, final */}
+        <ManifestoLine delay={2.4} style={{
+          ...base,
+          color: '#D4A017',
+          fontSize: 'clamp(0.95rem, 1.9vw, 1.15rem)',
+          fontStyle: 'italic',
+        }}>
+          ca să nu uiți niciodată cine ești.
+        </ManifestoLine>
+
+      </div>
+    </section>
   )
 }
