@@ -113,8 +113,16 @@ export default function Home() {
     const video = videoRef.current
     if (!video) return
 
-    // Apply persisted preference immediately on mount
-    if (localStorage.getItem('basarabia_sound_enabled') === 'true') {
+    // React's `muted` prop is unreliable on video elements — set it imperatively.
+    // This guarantees muted autoplay works on every browser including Safari.
+    video.muted = true
+
+    // Re-apply sound state on SPA re-navigation (e.g. homepage → /shop → back).
+    // Only safe to unmute if the user has already clicked the sound button this
+    // session (sessionStorage confirms the audio context was unlocked by a gesture).
+    const soundEnabled  = localStorage.getItem('basarabia_sound_enabled') === 'true'
+    const gestureGiven  = sessionStorage.getItem('basarabia_bell_played') === 'true'
+    if (soundEnabled && gestureGiven) {
       video.volume = 1
       video.muted  = false
     }

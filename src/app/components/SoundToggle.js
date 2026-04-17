@@ -3,13 +3,14 @@
 import { useState, useEffect, useRef } from 'react'
 
 export default function SoundToggle() {
+  // Always start OFF — React state in the layout persists across SPA navigation,
+  // so cross-page persistence is handled automatically without reading localStorage here.
   const [enabled, setEnabled] = useState(false)
   const [mounted, setMounted] = useState(false)
   const bellRef = useRef(null)
 
   useEffect(() => {
     setMounted(true)
-    setEnabled(localStorage.getItem('basarabia_sound_enabled') === 'true')
   }, [])
 
   const toggle = () => {
@@ -18,23 +19,25 @@ export default function SoundToggle() {
     localStorage.setItem('basarabia_sound_enabled', String(next))
     window.dispatchEvent(new CustomEvent('basarabia:sound-change', { detail: { enabled: next } }))
 
-    if (next && !localStorage.getItem('basarabia_bell_played')) {
-      if (!bellRef.current) bellRef.current = new Audio('/doorbell.wav')
-      bellRef.current.volume = 0.7
-      bellRef.current.play().catch(() => {})
-      localStorage.setItem('basarabia_bell_played', 'true')
+    if (next) {
+      // Play doorbell only on first click of the session (sessionStorage resets per tab)
+      if (!sessionStorage.getItem('basarabia_bell_played')) {
+        if (!bellRef.current) bellRef.current = new Audio('/doorbell.wav')
+        bellRef.current.volume = 0.7
+        bellRef.current.play().catch(() => {})
+        sessionStorage.setItem('basarabia_bell_played', 'true')
+      }
     }
   }
 
-  // Don't render until mounted — avoids hydration mismatch with localStorage
   if (!mounted) return null
 
   return (
     <>
       <style>{`
         @keyframes soundGlow {
-          0%, 100% { box-shadow: 0 0 8px rgba(212,160,23,0.25); }
-          50%       { box-shadow: 0 0 20px rgba(212,160,23,0.55); }
+          0%, 100% { box-shadow: 0 0 8px rgba(212,160,23,0.3), 0 0 0 0 rgba(212,160,23,0); }
+          50%       { box-shadow: 0 0 20px rgba(212,160,23,0.7), 0 0 0 6px rgba(212,160,23,0.08); }
         }
         @media (prefers-reduced-motion: reduce) {
           .sound-toggle { animation: none !important; }
@@ -56,7 +59,7 @@ export default function SoundToggle() {
           height: '44px',
           borderRadius: '50%',
           background: 'rgba(0,0,0,0.88)',
-          border: `1px solid rgba(212,160,23,${enabled ? 0.35 : 0.7})`,
+          border: `1px solid rgba(212,160,23,${enabled ? 0.35 : 0.75})`,
           color: '#D4A017',
           cursor: 'pointer',
           display: 'flex',
@@ -64,8 +67,8 @@ export default function SoundToggle() {
           justifyContent: 'center',
           backdropFilter: 'blur(10px)',
           WebkitBackdropFilter: 'blur(10px)',
-          animation: enabled ? 'none' : 'soundGlow 2.4s ease-in-out infinite',
-          transition: 'border-color 0.25s, box-shadow 0.25s',
+          animation: enabled ? 'none' : 'soundGlow 2s ease-in-out infinite',
+          transition: 'border-color 0.25s',
           padding: 0,
           flexShrink: 0,
         }}
