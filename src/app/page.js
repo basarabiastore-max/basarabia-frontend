@@ -209,8 +209,8 @@ export default function Home() {
             objectPosition: 'center center',
             display: 'block',
             mixBlendMode: 'screen',
-            maskImage: 'linear-gradient(to right, transparent 0%, black 18% 100%)',
-            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 18% 100%)',
+            maskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 88%, transparent 100%)',
+            WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 10%, black 88%, transparent 100%)',
           }}
         >
           <source src="/olguta.mp4" type="video/mp4" />
