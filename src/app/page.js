@@ -2,6 +2,8 @@
 
 import { motion, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
+import Navbar from './components/Navbar'
+import Footer from './components/Footer'
 import { useState, useEffect, useRef } from 'react'
 
 // ── Typewriter variants ────────────────────────────────────────────────────
@@ -38,7 +40,6 @@ const cursor = {
 
 export default function Home() {
   const [videoEnded, setVideoEnded] = useState(false)
-  const [menuOpen,   setMenuOpen]   = useState(false)
   const canvasRef = useRef(null)
   const videoRef  = useRef(null)
 
@@ -110,88 +111,7 @@ export default function Home() {
   return (
     <div style={{ margin: 0, padding: 0, backgroundColor: '#000' }}>
 
-      {/* ── NAVBAR ─────────────────────────────────────────────────────────── */}
-      <nav style={{
-        position: 'fixed',
-        top: 0, left: 0, right: 0,
-        zIndex: 100,
-        background: 'transparent',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        padding: '20px 40px',
-      }}>
-        <div />
-
-        {/* Desktop links */}
-        <div className="navbar-links" style={{ display: 'flex', gap: '40px' }}>
-          {['Produse', 'Despre Noi', 'Contact'].map(label => (
-            <a key={label} href="#" style={{
-              fontFamily: 'Georgia, serif',
-              color: '#D4A017',
-              fontSize: '0.75rem',
-              letterSpacing: '0.25em',
-              textTransform: 'uppercase',
-              textDecoration: 'none',
-            }}>{label}</a>
-          ))}
-        </div>
-
-        {/* Hamburger — mobile only */}
-        <button
-          className="hamburger-btn"
-          onClick={() => setMenuOpen(o => !o)}
-          style={{
-            display: 'none',
-            flexDirection: 'column',
-            gap: '5px',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: 0,
-          }}
-          aria-label="Menu"
-        >
-          {[0,1,2].map(i => (
-            <span key={i} style={{
-              display: 'block', width: '24px', height: '1.5px',
-              backgroundColor: '#D4A017',
-            }} />
-          ))}
-        </button>
-
-        {/* Mobile dropdown */}
-        {menuOpen && (
-          <div className="mobile-menu" style={{
-            position: 'absolute',
-            top: '100%', left: 0, right: 0,
-            backgroundColor: 'rgba(0,0,0,0.96)',
-            padding: '24px 25px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '20px',
-            borderTop: '1px solid rgba(212,160,23,0.2)',
-          }}>
-            {['Produse', 'Despre Noi', 'Contact'].map(label => (
-              <a key={label} href="#" onClick={() => setMenuOpen(false)} style={{
-                fontFamily: 'Georgia, serif',
-                color: '#D4A017',
-                fontSize: '0.85rem',
-                letterSpacing: '0.25em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-              }}>{label}</a>
-            ))}
-          </div>
-        )}
-
-        <div style={{
-          position: 'absolute',
-          bottom: 0, left: 0, right: 0,
-          height: '1px',
-          background: 'linear-gradient(to right, transparent, #D4A017, transparent)',
-        }} />
-      </nav>
+      <Navbar />
       <section
         style={{
           width: '100vw',
@@ -551,69 +471,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── FOOTER ─────────────────────────────────────────────────────────── */}
-      <footer style={{ backgroundColor: '#000000', width: '100%', padding: '50px 40px' }}>
-
-        {/* Top gold line */}
-        <div style={{
-          width: '100%', height: '1px',
-          background: 'linear-gradient(to right, transparent, #D4A017, transparent)',
-          marginBottom: '50px',
-        }} />
-
-        {/* Three columns */}
-        <div className="footer-grid" style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr 1fr',
-          gap: '40px',
-          maxWidth: '1200px',
-          margin: '0 auto',
-          alignItems: 'center',
-        }}>
-          {/* Left — brand */}
-          <div>
-            <p style={{
-              color: '#F5E6C8', fontFamily: 'Georgia, serif',
-              fontSize: '1.2rem', letterSpacing: '0.3em',
-              textTransform: 'uppercase', margin: '0 0 8px',
-            }}>Basarabia</p>
-            <p style={{
-              color: '#7a6a54', fontStyle: 'italic',
-              fontSize: '0.8rem', margin: 0, fontFamily: 'Georgia, serif',
-            }}>Gustul de Acasă, livrat la ușa ta</p>
-          </div>
-
-          {/* Center — email */}
-          <div style={{ textAlign: 'center' }}>
-            <a href="mailto:contact@basarabia.co.uk" style={{
-              color: '#D4A017', fontSize: '0.75rem',
-              letterSpacing: '0.15em', textDecoration: 'none',
-              fontFamily: 'Georgia, serif',
-            }}>contact@basarabia.co.uk</a>
-          </div>
-
-          {/* Right — social icons */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-            {[['F', 'Facebook'], ['I', 'Instagram'], ['T', 'TikTok']].map(([letter, label]) => (
-              <a key={label} href="#" aria-label={label} style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: '36px', height: '36px', borderRadius: '50%',
-                border: '1px solid rgba(212,160,23,0.4)',
-                color: '#D4A017', fontSize: '0.7rem',
-                textDecoration: 'none', fontFamily: 'Georgia, serif', flexShrink: 0,
-              }}>{letter}</a>
-            ))}
-          </div>
-        </div>
-
-        {/* Copyright */}
-        <p style={{
-          color: '#3a3028', fontSize: '0.65rem', letterSpacing: '0.2em',
-          textAlign: 'center', marginTop: '40px', marginBottom: 0,
-          fontFamily: 'Georgia, serif',
-        }}>© 2025 Basarabia · Toate drepturile rezervate</p>
-
-      </footer>
+      <Footer />
 
     </div>
   )
