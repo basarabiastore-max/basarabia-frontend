@@ -41,8 +41,6 @@ a {
     transform: none !important;
     object-fit: contain !important;
     object-position: center top !important;
-    mask-image: linear-gradient(to left, transparent 0%, black 15%, black 100%) !important;
-    -webkit-mask-image: linear-gradient(to left, transparent 0%, black 15%, black 100%) !important;
   }
 
   /* ── Hero text ── */
