@@ -63,16 +63,13 @@ export default function Footer() {
           background: #D4A017;
           color: #000;
           border-color: #D4A017;
-          transform: scale(1.1);
+          transform: scale(1.05);
         }
         .footer-social-icon:hover svg path,
         .footer-social-icon:hover svg rect,
         .footer-social-icon:hover svg polygon,
         .footer-social-icon:hover svg circle {
           stroke: #000;
-          fill: #000;
-        }
-        .footer-social-icon:hover svg .filled {
           fill: #000;
         }
 
@@ -98,7 +95,7 @@ export default function Footer() {
         .footer-payment-badges {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 16px;
         }
 
         .footer-newsletter-teaser {
@@ -317,44 +314,54 @@ function TikTokIcon() {
   )
 }
 
-/* ─── Payment Badge Icons (monochrome gold) ─────────────────── */
+/* ─── Payment Badge Icons (monochrome gold, 70% opacity) ───── */
 
 function VisaIcon() {
   return (
-    <svg width="38" height="24" viewBox="0 0 38 24" aria-label="Visa" role="img" style={{ opacity: 0.45 }}>
-      <rect width="38" height="24" rx="4" fill="#A8957A" />
-      <text x="5" y="17" fontFamily="Arial, sans-serif" fontWeight="700" fontSize="13" fill="#0a0a0a" letterSpacing="0">VISA</text>
+    <svg width="46" height="28" viewBox="0 0 46 28" aria-label="Visa" role="img" style={{ opacity: 0.7 }}>
+      <rect x="0.5" y="0.5" width="45" height="27" rx="4" fill="none" stroke="#A8957A" strokeWidth="0.8"/>
+      <text x="23" y="19.5" fontFamily="'Arial Black', Arial, sans-serif" fontWeight="900" fontStyle="italic" fontSize="15" fill="#A8957A" textAnchor="middle" letterSpacing="1">VISA</text>
     </svg>
   )
 }
 
 function MastercardIcon() {
   return (
-    <svg width="38" height="24" viewBox="0 0 38 24" aria-label="Mastercard" role="img" style={{ opacity: 0.45 }}>
-      <rect width="38" height="24" rx="4" fill="#0a0a0a" stroke="#A8957A" strokeWidth="0.8" />
-      <circle cx="14" cy="12" r="7" fill="#A8957A" />
-      <circle cx="24" cy="12" r="7" fill="#7a6a54" />
-      <path d="M19 6.8a7 7 0 0 1 0 10.4A7 7 0 0 1 19 6.8z" fill="#8B7A60" />
+    <svg width="46" height="28" viewBox="0 0 46 28" aria-label="Mastercard" role="img" style={{ opacity: 0.7 }}>
+      <rect x="0.5" y="0.5" width="45" height="27" rx="4" fill="none" stroke="#A8957A" strokeWidth="0.8"/>
+      <circle cx="18" cy="14" r="7" fill="#A8957A"/>
+      <circle cx="28" cy="14" r="7" fill="#7a6a54"/>
+      {/* overlap lens */}
+      <path d="M23 8.1a7 7 0 0 1 0 11.8A7 7 0 0 1 23 8.1z" fill="#C4A87A"/>
     </svg>
   )
 }
 
 function ApplePayIcon() {
   return (
-    <svg width="48" height="24" viewBox="0 0 48 24" aria-label="Apple Pay" role="img" style={{ opacity: 0.45 }}>
-      <rect width="48" height="24" rx="4" fill="#0a0a0a" stroke="#A8957A" strokeWidth="0.8" />
-      <text x="6" y="17" fontFamily="Arial, sans-serif" fontWeight="500" fontSize="10" fill="#A8957A"> Pay</text>
-      <path d="M9 7.2c.5-.6.8-1.4.7-2.2-.7.1-1.6.5-2.1 1.1-.5.5-.8 1.3-.7 2 .7.1 1.5-.3 2.1-0.9z" fill="#A8957A" transform="translate(1,1)" />
-      <path d="M9.7 8.3c-1.2-.1-2.2.7-2.7.7-.5 0-1.3-.6-2.2-.6-1.1 0-2.2.7-2.7 1.7-1.2 2 .3 4.9 1.2 6.5.4.6.9 1.4 1.6 1.3.6 0 .9-.4 1.7-.4.8 0 1 .4 1.7.4.7 0 1.1-.7 1.5-1.3.5-.7.7-1.4.7-1.4-1.5-.6-1.8-2.5-.2-3.3.5-.3.6-1 .4-1.6z" fill="#A8957A" transform="translate(1,1)" />
+    <svg width="54" height="28" viewBox="0 0 54 28" aria-label="Apple Pay" role="img" style={{ opacity: 0.7 }}>
+      <rect x="0.5" y="0.5" width="53" height="27" rx="4" fill="none" stroke="#A8957A" strokeWidth="0.8"/>
+      {/* Apple logo — nested svg maps 24×24 path into 15×21 slot */}
+      <svg x="7" y="3" width="15" height="21" viewBox="2 2 20 21">
+        <path fill="#A8957A" d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+      </svg>
+      <text x="38" y="18.5" fontFamily="Arial, sans-serif" fontWeight="500" fontSize="11" fill="#A8957A" textAnchor="middle">Pay</text>
     </svg>
   )
 }
 
 function GooglePayIcon() {
   return (
-    <svg width="48" height="24" viewBox="0 0 48 24" aria-label="Google Pay" role="img" style={{ opacity: 0.45 }}>
-      <rect width="48" height="24" rx="4" fill="#0a0a0a" stroke="#A8957A" strokeWidth="0.8" />
-      <text x="5" y="17" fontFamily="Arial, sans-serif" fontWeight="500" fontSize="10" fill="#A8957A">G Pay</text>
+    <svg width="54" height="28" viewBox="0 0 54 28" aria-label="Google Pay" role="img" style={{ opacity: 0.7 }}>
+      <rect x="0.5" y="0.5" width="53" height="27" rx="4" fill="none" stroke="#A8957A" strokeWidth="0.8"/>
+      {/* Google G mark — all segments rendered in matching gold */}
+      <svg x="7" y="5" width="17" height="17" viewBox="0 0 24 24">
+        <path fill="#A8957A" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+        <path fill="#A8957A" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+        <path fill="#A8957A" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+        <path fill="#A8957A" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+      </svg>
+      <text x="39" y="18.5" fontFamily="Arial, sans-serif" fontWeight="500" fontSize="11" fill="#A8957A" textAnchor="middle">Pay</text>
     </svg>
   )
 }

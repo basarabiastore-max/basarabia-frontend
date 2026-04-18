@@ -1143,10 +1143,19 @@ function NewsletterSignup() {
             fontSize: 'clamp(0.82rem, 1.6vw, 0.98rem)',
             fontStyle: 'italic',
             lineHeight: 1.9,
+            marginBottom: 'clamp(0.6rem, 1.2vw, 0.9rem)',
           }}>
-            Receive Tanti Olguța&apos;s recipe of the week — cooked with products you&apos;ll actually find in our shop.{' '}
-            Stories from home. Kitchen secrets. Nothing else.{' '}
-            <span style={{ fontStyle: 'normal', opacity: 0.6 }}>· No spam. Unsubscribe anytime.</span>
+            Receive Tanti Olguța&apos;s recipe of the week — cooked with products you&apos;ll actually find in our shop.
+            Stories from home. Kitchen secrets. Nothing else.
+          </p>
+          <p style={{
+            ...base,
+            color: '#7a6a54',
+            fontSize: 'clamp(0.78rem, 1.4vw, 0.88rem)',
+            fontStyle: 'italic',
+            opacity: 0.7,
+          }}>
+            No spam. Unsubscribe anytime.
           </p>
         </motion.div>
 
