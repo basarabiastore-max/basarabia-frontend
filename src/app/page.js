@@ -183,26 +183,7 @@ export default function Home() {
           autoPlay
           muted
           playsInline
-          onEnded={() => {
-            setVideoEnded(true)
-            const video = videoRef.current
-            if (!video || video.muted) return
-            // Fade audio out over 3 seconds, then silence
-            const startVol = video.volume
-            const start    = performance.now()
-            const tick = (now) => {
-              if (!videoRef.current || videoRef.current.muted) return
-              const t = Math.min((now - start) / 3000, 1)
-              videoRef.current.volume = startVol * (1 - t)
-              if (t < 1) {
-                requestAnimationFrame(tick)
-              } else {
-                videoRef.current.muted  = true
-                videoRef.current.volume = 1
-              }
-            }
-            requestAnimationFrame(tick)
-          }}
+          onEnded={() => setVideoEnded(true)}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7, ease: 'easeIn' }}

@@ -37,10 +37,9 @@ a {
     right: 0 !important;
     top: auto !important;
     bottom: 0 !important;
-    height: 72% !important;
+    height: 60% !important;
     transform: none !important;
-    object-fit: contain !important;
-    object-position: center top !important;
+    object-fit: cover !important;
   }
 
   /* ── Hero text ── */
