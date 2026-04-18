@@ -457,9 +457,6 @@ export default function Home() {
       {/* ── BRAND MANIFESTO ───────────────────────────────────────────────── */}
       <Manifesto />
 
-      {/* ── CONCEPT STORE ─────────────────────────────────────────────────── */}
-      <ConceptStore />
-
       {/* ── SECTION 2 — Why Us ─────────────────────────────────────────────── */}
       <section style={{
         backgroundColor: '#0a0a0a',
@@ -538,7 +535,7 @@ export default function Home() {
   )
 }
 
-// ── BRAND MANIFESTO ────────────────────────────────────────────────────────
+// ── BRAND MANIFESTO (unified bilingual) ────────────────────────────────────
 function ManifestoLine({ children, delay, style = {} }) {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
@@ -557,6 +554,11 @@ function ManifestoLine({ children, delay, style = {} }) {
 }
 
 function Manifesto() {
+  const dividerRef = useRef(null)
+  const enBlockRef = useRef(null)
+  const dividerIn  = useInView(dividerRef, { once: true, margin: '-80px' })
+  const enBlockIn  = useInView(enBlockRef, { once: true, margin: '-80px' })
+
   const base = {
     margin: 0,
     fontFamily: 'Georgia, "Times New Roman", serif',
@@ -564,87 +566,29 @@ function Manifesto() {
     lineHeight: 1.9,
   }
 
-  return (
-    <section style={{
-      backgroundColor: '#000',
-      width: '100%',
-      padding: 'clamp(120px, 14vw, 200px) clamp(1.5rem, 5vw, 4rem)',
-    }}>
-      <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+  const prominent = {
+    ...base,
+    color: '#F5E6C8',
+    fontSize: 'clamp(1.25rem, 3vw, 1.9rem)',
+    fontFamily: 'var(--font-cinzel), "Palatino Linotype", Georgia, serif',
+    fontWeight: 700,
+    letterSpacing: '0.04em',
+    marginBottom: 'clamp(2rem, 4vw, 3rem)',
+    textShadow: '0 0 40px rgba(212,160,23,0.2)',
+  }
 
-        {/* Line 1 — prominent */}
-        <ManifestoLine delay={0} style={{
-          ...base,
-          color: '#F5E6C8',
-          fontSize: 'clamp(1.25rem, 3vw, 1.9rem)',
-          fontFamily: 'var(--font-cinzel), "Palatino Linotype", Georgia, serif',
-          fontWeight: 700,
-          letterSpacing: '0.04em',
-          marginBottom: 'clamp(2rem, 4vw, 3rem)',
-          textShadow: '0 0 40px rgba(212,160,23,0.2)',
-        }}>
-          Basarabia nu e doar un magazin.
-        </ManifestoLine>
+  const body = {
+    ...base,
+    color: '#A8957A',
+    fontSize: 'clamp(0.95rem, 1.9vw, 1.15rem)',
+    marginBottom: 'clamp(2rem, 4vw, 3rem)',
+  }
 
-        {/* Block 2 */}
-        <ManifestoLine delay={0.8} style={{
-          ...base,
-          color: '#A8957A',
-          fontSize: 'clamp(0.95rem, 1.9vw, 1.15rem)',
-          marginBottom: 'clamp(2rem, 4vw, 3rem)',
-        }}>
-          E memoria unui gust. E drumul spre casă,<br />
-          păstrat într-un borcan, într-o pâine,<br />
-          într-o bucată de brânză.
-        </ManifestoLine>
-
-        {/* Line 3 */}
-        <ManifestoLine delay={1.6} style={{
-          ...base,
-          color: '#A8957A',
-          fontSize: 'clamp(0.95rem, 1.9vw, 1.15rem)',
-          marginBottom: '0.6rem',
-        }}>
-          Am adus cămara bunicii tale în Anglia —
-        </ManifestoLine>
-
-        {/* Line 4 — italic, final */}
-        <ManifestoLine delay={2.4} style={{
-          ...base,
-          color: '#D4A017',
-          fontSize: 'clamp(0.95rem, 1.9vw, 1.15rem)',
-          fontStyle: 'italic',
-        }}>
-          ca să nu uiți niciodată cine ești.
-        </ManifestoLine>
-
-      </div>
-    </section>
-  )
-}
-
-// ── CONCEPT STORE ──────────────────────────────────────────────────────────
-function ConceptStore() {
-  const roHeadingRef  = useRef(null)
-  const roBodyRef     = useRef(null)
-  const dividerRef    = useRef(null)
-  const enBlockRef    = useRef(null)
-
-  const roHeadingIn = useInView(roHeadingRef, { once: true, margin: '-80px' })
-  const roBodyIn    = useInView(roBodyRef,    { once: true, margin: '-80px' })
-  const dividerIn   = useInView(dividerRef,   { once: true, margin: '-80px' })
-  const enBlockIn   = useInView(enBlockRef,   { once: true, margin: '-80px' })
-
-  const fade = (inView, delay) => ({
-    initial: { opacity: 0, y: 20 },
-    animate: inView ? { opacity: 1, y: 0 } : {},
-    transition: { duration: 1.2, delay, ease: [0.22, 1, 0.36, 1] },
-  })
-
-  const base = {
-    margin: 0,
-    textAlign: 'center',
-    lineHeight: 1.85,
+  const enBase = {
+    ...base,
+    color: '#7a6a54',
+    fontSize: 'clamp(0.82rem, 1.6vw, 0.98rem)',
+    fontStyle: 'italic',
   }
 
   return (
@@ -655,70 +599,91 @@ function ConceptStore() {
     }}>
       <div style={{ maxWidth: '700px', margin: '0 auto' }}>
 
-        {/* Romanian heading */}
-        <motion.p
-          ref={roHeadingRef}
-          {...fade(roHeadingIn, 0)}
-          style={{
-            ...base,
-            color: '#F5E6C8',
-            fontSize: 'clamp(1.25rem, 3vw, 1.9rem)',
-            fontFamily: 'var(--font-cinzel), "Palatino Linotype", Georgia, serif',
-            fontWeight: 700,
-            letterSpacing: '0.04em',
-            marginBottom: 'clamp(1.5rem, 3vw, 2.2rem)',
-            textShadow: '0 0 40px rgba(212,160,23,0.2)',
-          }}
-        >
-          Basarabia nu e un magazin obișnuit.
-        </motion.p>
+        {/* RO Block 1 — prominent opening */}
+        <ManifestoLine delay={0} style={prominent}>
+          Basarabia nu e doar un magazin.
+        </ManifestoLine>
 
-        {/* Romanian body */}
-        <motion.p
-          ref={roBodyRef}
-          {...fade(roBodyIn, 0.8)}
-          style={{
-            ...base,
-            color: '#A8957A',
-            fontSize: 'clamp(0.95rem, 1.9vw, 1.15rem)',
-            fontFamily: 'Georgia, "Times New Roman", serif',
-            marginBottom: 'clamp(2.5rem, 5vw, 3.5rem)',
-          }}
-        >
+        {/* RO Block 2 — memory */}
+        <ManifestoLine delay={0.8} style={body}>
+          E memoria unui gust. E drumul spre casă,<br />
+          păstrat într-un borcan, într-o pâine,<br />
+          într-o bucată de brânză.
+        </ManifestoLine>
+
+        {/* RO Block 3 — concept store */}
+        <ManifestoLine delay={1.6} style={body}>
           E un Concept Store — un loc unde măcelarul, brutarul și cofetarul lucrează sub același acoperiș.{' '}
           Carnea o tranșăm noi. Pâinea și patiseria le facem în casă, în fiecare dimineață, după rețete autentice.
-        </motion.p>
+        </ManifestoLine>
 
-        {/* Divider */}
+        {/* RO Block 4a — closing line */}
+        <ManifestoLine delay={2.4} style={{ ...body, marginBottom: '0.6rem' }}>
+          Am adus cămara bunicii tale în Anglia —
+        </ManifestoLine>
+
+        {/* RO Block 4b — closing line, italic gold */}
+        <ManifestoLine delay={3.2} style={{
+          ...base,
+          color: '#D4A017',
+          fontSize: 'clamp(0.95rem, 1.9vw, 1.15rem)',
+          fontStyle: 'italic',
+          marginBottom: 'clamp(3rem, 6vw, 4.5rem)',
+        }}>
+          ca să nu uiți niciodată cine ești.
+        </ManifestoLine>
+
+        {/* ── Divider ── */}
         <motion.div
           ref={dividerRef}
-          {...fade(dividerIn, 1.6)}
-          style={{ textAlign: 'center', marginBottom: 'clamp(2.5rem, 5vw, 3.5rem)' }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={dividerIn ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          style={{ textAlign: 'center', marginBottom: 'clamp(3rem, 6vw, 4.5rem)' }}
         >
           <span style={{ color: '#D4A017', fontSize: '1rem' }}>✦</span>
         </motion.div>
 
-        {/* English block */}
-        <motion.div ref={enBlockRef} {...fade(enBlockIn, 0)}>
+        {/* ── English block (fades in as one unit) ── */}
+        <motion.div
+          ref={enBlockRef}
+          initial={{ opacity: 0, y: 20 }}
+          animate={enBlockIn ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {/* EN Block 1 — prominent */}
           <p style={{
-            ...base,
+            ...enBase,
+            fontSize: 'clamp(1rem, 2.2vw, 1.4rem)',
+            fontFamily: 'var(--font-cinzel), "Palatino Linotype", Georgia, serif',
+            fontWeight: 700,
+            fontStyle: 'normal',
             color: '#7a6a54',
-            fontSize: 'clamp(0.82rem, 1.6vw, 0.98rem)',
-            fontFamily: 'Georgia, "Times New Roman", serif',
-            marginBottom: 'clamp(0.8rem, 1.5vw, 1.1rem)',
-            fontStyle: 'italic',
+            letterSpacing: '0.03em',
+            marginBottom: 'clamp(1.5rem, 3vw, 2rem)',
           }}>
-            Basarabia is not an ordinary shop.
+            Basarabia is more than a shop.
           </p>
-          <p style={{
-            ...base,
-            color: '#7a6a54',
-            fontSize: 'clamp(0.82rem, 1.6vw, 0.98rem)',
-            fontFamily: 'Georgia, "Times New Roman", serif',
-            fontStyle: 'italic',
-          }}>
-            It&apos;s a Concept Store — a place where the butcher, the baker, and the pastry chef all work under the same roof.{' '}
-            We cut our meat in-house. Our bread and pastries are made fresh every morning, from authentic traditional recipes.
+
+          {/* EN Block 2 — memory */}
+          <p style={{ ...enBase, marginBottom: 'clamp(1.5rem, 3vw, 2rem)' }}>
+            It is the memory of a taste. The road back home, kept in a jar,
+            in a loaf of bread, in a piece of cheese.
+          </p>
+
+          {/* EN Block 3 — concept store */}
+          <p style={{ ...enBase, marginBottom: 'clamp(1.5rem, 3vw, 2rem)' }}>
+            It is a Concept Store — a place where the butcher, the baker, and the pastry chef
+            all work under the same roof. We cut our meat in-house. Our bread and pastries are
+            made fresh every morning, from authentic traditional recipes.
+          </p>
+
+          {/* EN Block 4 — closing */}
+          <p style={{ ...enBase, marginBottom: '0.5rem' }}>
+            We brought your grandmother&apos;s pantry to England —
+          </p>
+          <p style={{ ...enBase, color: '#D4A017' }}>
+            so you never forget who you are.
           </p>
         </motion.div>
 
