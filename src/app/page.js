@@ -532,6 +532,9 @@ export default function Home() {
       {/* ── DELIVERY ZONES ────────────────────────────────────────────────── */}
       <DeliveryZones />
 
+      {/* ── NEWSLETTER ────────────────────────────────────────────────────── */}
+      <NewsletterSignup />
+
       <Footer />
 
     </div>
@@ -887,6 +890,279 @@ function DeliveryZones() {
         </motion.div>
 
       </div>
+    </section>
+  )
+}
+
+// ── NEWSLETTER SIGNUP ───────────────────────────────────────────────────────
+function NewsletterSignup() {
+  const headRef     = useRef(null)
+  const bodyRef     = useRef(null)
+  const formRef     = useRef(null)
+  const footnoteRef = useRef(null)
+  const dividerRef  = useRef(null)
+  const enRef       = useRef(null)
+
+  const headIn     = useInView(headRef,     { once: true, margin: '-80px' })
+  const bodyIn     = useInView(bodyRef,     { once: true, margin: '-80px' })
+  const formIn     = useInView(formRef,     { once: true, margin: '-80px' })
+  const footnoteIn = useInView(footnoteRef, { once: true, margin: '-80px' })
+  const dividerIn  = useInView(dividerRef,  { once: true, margin: '-80px' })
+  const enIn       = useInView(enRef,       { once: true, margin: '-80px' })
+
+  const [email,     setEmail]     = useState('')
+  const [status,    setStatus]    = useState('idle') // idle | submitting | success | error
+  const [errMsg,    setErrMsg]    = useState('')
+  const [focussed,  setFocussed]  = useState(false)
+
+  const fadeIn = (inView, delay = 0) => ({
+    initial: { opacity: 0, y: 20 },
+    animate: inView ? { opacity: 1, y: 0 } : {},
+    transition: { duration: 1.2, delay, ease: [0.22, 1, 0.36, 1] },
+  })
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    if (!email) return
+    setStatus('submitting')
+    setErrMsg('')
+    try {
+      const res = await fetch('/api/newsletter-signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, language: 'ro' }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.success) throw new Error(data.error || 'Unknown error')
+      setStatus('success')
+      setEmail('')
+      setTimeout(() => setStatus('idle'), 5000)
+    } catch (err) {
+      setErrMsg(err.message || 'A apărut o eroare. Încearcă din nou.')
+      setStatus('error')
+    }
+  }
+
+  const base = {
+    margin: 0,
+    fontFamily: 'Georgia, "Times New Roman", serif',
+    textAlign: 'center',
+  }
+
+  const inputStyle = {
+    flex: 1,
+    minWidth: 0,
+    background: 'transparent',
+    border: `1px solid ${focussed ? '#D4A017' : 'rgba(212,160,23,0.4)'}`,
+    borderRadius: '4px',
+    color: '#F5E6C8',
+    fontSize: '0.95rem',
+    padding: '14px 16px',
+    outline: 'none',
+    fontFamily: 'Georgia, serif',
+    boxShadow: focussed ? '0 0 10px rgba(212,160,23,0.18)' : 'none',
+    transition: 'border-color 0.2s, box-shadow 0.2s',
+  }
+
+  return (
+    <section style={{
+      backgroundColor: '#000',
+      width: '100%',
+      padding: 'clamp(120px, 14vw, 200px) clamp(1.5rem, 5vw, 4rem)',
+    }}>
+      <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+
+        {/* RO Headline */}
+        <motion.p ref={headRef} {...fadeIn(headIn, 0)} style={{
+          ...base,
+          color: '#F5E6C8',
+          fontSize: 'clamp(1.25rem, 3vw, 1.9rem)',
+          fontFamily: 'var(--font-cinzel), "Palatino Linotype", Georgia, serif',
+          fontWeight: 700,
+          letterSpacing: '0.04em',
+          lineHeight: 1.3,
+          marginBottom: 'clamp(1.5rem, 3vw, 2rem)',
+          textShadow: '0 0 40px rgba(212,160,23,0.2)',
+        }}>
+          Duminică dimineața, în cutia ta poștală.
+        </motion.p>
+
+        {/* RO Body */}
+        <motion.p ref={bodyRef} {...fadeIn(bodyIn, 0.8)} style={{
+          ...base,
+          color: '#A8957A',
+          fontSize: 'clamp(0.95rem, 1.9vw, 1.15rem)',
+          lineHeight: 1.9,
+          marginBottom: 'clamp(2rem, 4vw, 2.8rem)',
+        }}>
+          Primește rețeta săptămânii de la Tanti Olguța — gătită cu produse care chiar se găsesc la noi în magazin.{' '}
+          Povești de acasă. Secrete de bucătărie. Nimic altceva.
+        </motion.p>
+
+        {/* Form */}
+        <motion.div ref={formRef} {...fadeIn(formIn, 1.4)}>
+          {status === 'success' ? (
+            <p style={{
+              ...base,
+              color: '#D4A017',
+              fontFamily: 'var(--font-cinzel), Georgia, serif',
+              fontSize: 'clamp(0.95rem, 1.9vw, 1.15rem)',
+              letterSpacing: '0.08em',
+              padding: '14px 0',
+            }}>
+              Mulțumim! / Thank you!
+            </p>
+          ) : (
+            <form onSubmit={handleSubmit} noValidate>
+              {/* Visually hidden label */}
+              <label
+                htmlFor="newsletter-email"
+                style={{
+                  position: 'absolute',
+                  width: '1px', height: '1px',
+                  padding: 0, margin: '-1px',
+                  overflow: 'hidden',
+                  clip: 'rect(0,0,0,0)',
+                  whiteSpace: 'nowrap',
+                  border: 0,
+                }}
+              >
+                Adresa ta de email
+              </label>
+
+              <div className="newsletter-form-row" style={{
+                display: 'flex',
+                gap: '10px',
+                alignItems: 'stretch',
+              }}>
+                <input
+                  id="newsletter-email"
+                  type="email"
+                  required
+                  value={email}
+                  onChange={e => { setEmail(e.target.value); setErrMsg('') }}
+                  onFocus={() => setFocussed(true)}
+                  onBlur={() => setFocussed(false)}
+                  placeholder="adresa@email.com"
+                  style={{
+                    ...inputStyle,
+                    ...(status === 'error' ? {
+                      borderColor: 'rgba(180,50,50,0.7)',
+                      boxShadow: '0 0 8px rgba(180,50,50,0.15)',
+                    } : {}),
+                  }}
+                />
+                <button
+                  type="submit"
+                  aria-label="Mă abonez la newsletter"
+                  disabled={status === 'submitting'}
+                  style={{
+                    background: status === 'submitting' ? 'rgba(212,160,23,0.6)' : '#D4A017',
+                    color: '#000',
+                    border: 'none',
+                    borderRadius: '4px',
+                    padding: '14px 22px',
+                    fontFamily: 'var(--font-cinzel), Georgia, serif',
+                    fontSize: 'clamp(0.7rem, 1.3vw, 0.82rem)',
+                    fontWeight: 700,
+                    letterSpacing: '0.15em',
+                    textTransform: 'uppercase',
+                    cursor: status === 'submitting' ? 'wait' : 'pointer',
+                    whiteSpace: 'nowrap',
+                    transition: 'background 0.2s, box-shadow 0.2s',
+                  }}
+                  onMouseEnter={e => { if (status !== 'submitting') e.currentTarget.style.boxShadow = '0 0 16px rgba(212,160,23,0.5)' }}
+                  onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none' }}
+                >
+                  {status === 'submitting' ? '...' : 'Mă abonez'}
+                </button>
+              </div>
+
+              {status === 'error' && errMsg && (
+                <p style={{
+                  ...base,
+                  color: 'rgba(200,80,80,0.9)',
+                  fontSize: '0.82rem',
+                  marginTop: '8px',
+                  fontStyle: 'italic',
+                }}>
+                  {errMsg}
+                </p>
+              )}
+            </form>
+          )}
+        </motion.div>
+
+        {/* RO Footnote */}
+        <motion.p ref={footnoteRef} {...fadeIn(footnoteIn, 1.9)} style={{
+          ...base,
+          color: '#7a6a54',
+          fontSize: 'clamp(0.78rem, 1.4vw, 0.88rem)',
+          fontStyle: 'italic',
+          marginTop: 'clamp(1rem, 2vw, 1.4rem)',
+          marginBottom: 'clamp(3rem, 6vw, 4.5rem)',
+          lineHeight: 1.7,
+        }}>
+          Fără spam. Dezabonare oricând.
+        </motion.p>
+
+        {/* ── Divider ── */}
+        <motion.div
+          ref={dividerRef}
+          initial={{ opacity: 0, y: 20 }}
+          animate={dividerIn ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          style={{ textAlign: 'center', marginBottom: 'clamp(3rem, 6vw, 4.5rem)' }}
+        >
+          <span style={{ color: '#D4A017', fontSize: '1rem' }}>✦</span>
+        </motion.div>
+
+        {/* ── English block (no duplicate form) ── */}
+        <motion.div
+          ref={enRef}
+          initial={{ opacity: 0, y: 20 }}
+          animate={enIn ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <p style={{
+            ...base,
+            color: '#7a6a54',
+            fontSize: 'clamp(1rem, 2.2vw, 1.4rem)',
+            fontFamily: 'var(--font-cinzel), "Palatino Linotype", Georgia, serif',
+            fontWeight: 700,
+            fontStyle: 'normal',
+            letterSpacing: '0.03em',
+            lineHeight: 1.3,
+            marginBottom: 'clamp(1rem, 2vw, 1.4rem)',
+          }}>
+            Every Sunday morning, in your inbox.
+          </p>
+          <p style={{
+            ...base,
+            color: '#7a6a54',
+            fontSize: 'clamp(0.82rem, 1.6vw, 0.98rem)',
+            fontStyle: 'italic',
+            lineHeight: 1.9,
+          }}>
+            Receive Tanti Olguța&apos;s recipe of the week — cooked with products you&apos;ll actually find in our shop.{' '}
+            Stories from home. Kitchen secrets. Nothing else.{' '}
+            <span style={{ fontStyle: 'normal', opacity: 0.6 }}>· No spam. Unsubscribe anytime.</span>
+          </p>
+        </motion.div>
+
+      </div>
+
+      {/* Mobile: stack form vertically */}
+      <style>{`
+        @media (max-width: 600px) {
+          .newsletter-form-row {
+            flex-direction: column !important;
+          }
+          .newsletter-form-row button {
+            width: 100%;
+          }
+        }
+      `}</style>
     </section>
   )
 }

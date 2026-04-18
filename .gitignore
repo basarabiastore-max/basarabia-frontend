@@ -42,3 +42,6 @@ next-env.d.ts
 
 # Claude Code
 .claude/
+
+# Newsletter signups — local storage only, never commit emails
+/data
