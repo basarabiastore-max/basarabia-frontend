@@ -529,6 +529,9 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── DELIVERY ZONES ────────────────────────────────────────────────── */}
+      <DeliveryZones />
+
       <Footer />
 
     </div>
@@ -684,6 +687,202 @@ function Manifesto() {
           </p>
           <p style={{ ...enBase, color: '#D4A017' }}>
             so you never forget who you are.
+          </p>
+        </motion.div>
+
+      </div>
+    </section>
+  )
+}
+
+// ── DELIVERY ZONES ──────────────────────────────────────────────────────────
+const TOWNS = ['Spalding', 'Holbeach', 'Bourne', 'Boston', 'Peterborough']
+
+function DeliveryZones() {
+  const svgRef      = useRef(null)
+  const headRef     = useRef(null)
+  const subRef      = useRef(null)
+  const townsRef    = useRef(null)
+  const footnoteRef = useRef(null)
+  const dividerRef  = useRef(null)
+  const enRef       = useRef(null)
+
+  const svgIn      = useInView(svgRef,      { once: true, margin: '-80px' })
+  const headIn     = useInView(headRef,     { once: true, margin: '-80px' })
+  const subIn      = useInView(subRef,      { once: true, margin: '-80px' })
+  const townsIn    = useInView(townsRef,    { once: true, margin: '-80px' })
+  const footnoteIn = useInView(footnoteRef, { once: true, margin: '-80px' })
+  const dividerIn  = useInView(dividerRef,  { once: true, margin: '-80px' })
+  const enIn       = useInView(enRef,       { once: true, margin: '-80px' })
+
+  const fadeIn = (inView, delay = 0) => ({
+    initial: { opacity: 0, y: 20 },
+    animate: inView ? { opacity: 1, y: 0 } : {},
+    transition: { duration: 1.2, delay, ease: [0.22, 1, 0.36, 1] },
+  })
+
+  const base = {
+    margin: 0,
+    fontFamily: 'Georgia, "Times New Roman", serif',
+    textAlign: 'center',
+  }
+
+  return (
+    <section style={{
+      backgroundColor: '#000',
+      width: '100%',
+      padding: 'clamp(120px, 14vw, 200px) clamp(1.5rem, 5vw, 4rem)',
+    }}>
+      <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+
+        {/* ── Concentric-circle radius visual ── */}
+        <motion.div
+          ref={svgRef}
+          {...fadeIn(svgIn, 0)}
+          style={{ display: 'flex', justifyContent: 'center', marginBottom: 'clamp(2.5rem, 5vw, 3.5rem)' }}
+        >
+          <svg
+            viewBox="0 0 200 200"
+            style={{ width: 'clamp(120px, 22vw, 180px)', height: 'clamp(120px, 22vw, 180px)' }}
+            aria-hidden="true"
+          >
+            {/* Outermost ring */}
+            <circle cx="100" cy="100" r="90" fill="none" stroke="#D4A017" strokeWidth="1" opacity="0.07" />
+            {/* Middle ring */}
+            <circle cx="100" cy="100" r="64" fill="none" stroke="#D4A017" strokeWidth="1" opacity="0.12" />
+            {/* Inner ring */}
+            <circle cx="100" cy="100" r="38" fill="none" stroke="#D4A017" strokeWidth="1" opacity="0.18" />
+            {/* Center glow */}
+            <circle cx="100" cy="100" r="10" fill="#D4A017" opacity="0.15" />
+            {/* Center dot */}
+            <circle cx="100" cy="100" r="4"  fill="#D4A017" opacity="0.9" />
+          </svg>
+        </motion.div>
+
+        {/* RO Headline */}
+        <motion.p ref={headRef} {...fadeIn(headIn, 0.4)} style={{
+          ...base,
+          color: '#F5E6C8',
+          fontSize: 'clamp(1.25rem, 3vw, 1.9rem)',
+          fontFamily: 'var(--font-cinzel), "Palatino Linotype", Georgia, serif',
+          fontWeight: 700,
+          letterSpacing: '0.04em',
+          marginBottom: 'clamp(1rem, 2vw, 1.4rem)',
+          textShadow: '0 0 40px rgba(212,160,23,0.2)',
+          lineHeight: 1.3,
+        }}>
+          Livrăm proaspăt pe o rază de 20 de mile.
+        </motion.p>
+
+        {/* RO Subheading */}
+        <motion.p ref={subRef} {...fadeIn(subIn, 0.7)} style={{
+          ...base,
+          color: '#A8957A',
+          fontSize: 'clamp(0.95rem, 1.9vw, 1.15rem)',
+          fontStyle: 'italic',
+          marginBottom: 'clamp(1.8rem, 3.5vw, 2.5rem)',
+          lineHeight: 1.7,
+        }}>
+          Aceeași zi sau a doua zi — fără excepții.
+        </motion.p>
+
+        {/* RO Towns */}
+        <motion.p ref={townsRef} {...fadeIn(townsIn, 1.0)} style={{
+          ...base,
+          color: '#A8957A',
+          fontSize: 'clamp(0.95rem, 1.9vw, 1.15rem)',
+          letterSpacing: '0.08em',
+          lineHeight: 2,
+          marginBottom: 'clamp(1.2rem, 2.5vw, 1.8rem)',
+          flexWrap: 'wrap',
+        }}>
+          {TOWNS.map((town, i) => (
+            <motion.span
+              key={town}
+              initial={{ opacity: 0 }}
+              animate={townsIn ? { opacity: 1 } : {}}
+              transition={{ duration: 0.7, delay: 1.0 + i * 0.08, ease: 'easeOut' }}
+            >
+              {town}{i < TOWNS.length - 1 && <span style={{ color: '#D4A017', margin: '0 0.5em' }}>·</span>}
+            </motion.span>
+          ))}
+        </motion.p>
+
+        {/* RO Footnote */}
+        <motion.p ref={footnoteRef} {...fadeIn(footnoteIn, 1.5)} style={{
+          ...base,
+          color: '#7a6a54',
+          fontSize: 'clamp(0.78rem, 1.4vw, 0.88rem)',
+          fontStyle: 'italic',
+          marginBottom: 'clamp(3rem, 6vw, 4.5rem)',
+          lineHeight: 1.7,
+        }}>
+          Pentru comenzi în afara acestei raze, contactați-ne direct.
+        </motion.p>
+
+        {/* ── Divider ── */}
+        <motion.div
+          ref={dividerRef}
+          initial={{ opacity: 0, y: 20 }}
+          animate={dividerIn ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          style={{ textAlign: 'center', marginBottom: 'clamp(3rem, 6vw, 4.5rem)' }}
+        >
+          <span style={{ color: '#D4A017', fontSize: '1rem' }}>✦</span>
+        </motion.div>
+
+        {/* ── English block (one unit) ── */}
+        <motion.div
+          ref={enRef}
+          initial={{ opacity: 0, y: 20 }}
+          animate={enIn ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+        >
+          <p style={{
+            ...base,
+            color: '#7a6a54',
+            fontSize: 'clamp(1rem, 2.2vw, 1.4rem)',
+            fontFamily: 'var(--font-cinzel), "Palatino Linotype", Georgia, serif',
+            fontWeight: 700,
+            fontStyle: 'normal',
+            letterSpacing: '0.03em',
+            marginBottom: 'clamp(1rem, 2vw, 1.4rem)',
+            lineHeight: 1.3,
+          }}>
+            We deliver fresh within a 20-mile radius.
+          </p>
+          <p style={{
+            ...base,
+            color: '#7a6a54',
+            fontSize: 'clamp(0.82rem, 1.6vw, 0.98rem)',
+            fontStyle: 'italic',
+            marginBottom: 'clamp(1.2rem, 2.5vw, 1.8rem)',
+            lineHeight: 1.7,
+          }}>
+            Same day or next day — no exceptions.
+          </p>
+          <p style={{
+            ...base,
+            color: '#7a6a54',
+            fontSize: 'clamp(0.82rem, 1.6vw, 0.98rem)',
+            letterSpacing: '0.08em',
+            lineHeight: 2,
+            marginBottom: 'clamp(1rem, 2vw, 1.4rem)',
+          }}>
+            {TOWNS.map((town, i) => (
+              <span key={town}>
+                {town}{i < TOWNS.length - 1 && <span style={{ color: '#D4A017', margin: '0 0.5em' }}>·</span>}
+              </span>
+            ))}
+          </p>
+          <p style={{
+            ...base,
+            color: '#7a6a54',
+            fontSize: 'clamp(0.78rem, 1.4vw, 0.88rem)',
+            fontStyle: 'italic',
+            lineHeight: 1.7,
+          }}>
+            For orders outside this area, please contact us directly.
           </p>
         </motion.div>
 
