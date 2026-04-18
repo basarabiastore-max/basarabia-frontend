@@ -457,6 +457,9 @@ export default function Home() {
       {/* ── BRAND MANIFESTO ───────────────────────────────────────────────── */}
       <Manifesto />
 
+      {/* ── CONCEPT STORE ─────────────────────────────────────────────────── */}
+      <ConceptStore />
+
       {/* ── SECTION 2 — Why Us ─────────────────────────────────────────────── */}
       <section style={{
         backgroundColor: '#0a0a0a',
@@ -614,6 +617,110 @@ function Manifesto() {
         }}>
           ca să nu uiți niciodată cine ești.
         </ManifestoLine>
+
+      </div>
+    </section>
+  )
+}
+
+// ── CONCEPT STORE ──────────────────────────────────────────────────────────
+function ConceptStore() {
+  const roHeadingRef  = useRef(null)
+  const roBodyRef     = useRef(null)
+  const dividerRef    = useRef(null)
+  const enBlockRef    = useRef(null)
+
+  const roHeadingIn = useInView(roHeadingRef, { once: true, margin: '-80px' })
+  const roBodyIn    = useInView(roBodyRef,    { once: true, margin: '-80px' })
+  const dividerIn   = useInView(dividerRef,   { once: true, margin: '-80px' })
+  const enBlockIn   = useInView(enBlockRef,   { once: true, margin: '-80px' })
+
+  const fade = (inView, delay) => ({
+    initial: { opacity: 0, y: 20 },
+    animate: inView ? { opacity: 1, y: 0 } : {},
+    transition: { duration: 1.2, delay, ease: [0.22, 1, 0.36, 1] },
+  })
+
+  const base = {
+    margin: 0,
+    textAlign: 'center',
+    lineHeight: 1.85,
+  }
+
+  return (
+    <section style={{
+      backgroundColor: '#000',
+      width: '100%',
+      padding: 'clamp(120px, 14vw, 200px) clamp(1.5rem, 5vw, 4rem)',
+    }}>
+      <div style={{ maxWidth: '700px', margin: '0 auto' }}>
+
+        {/* Romanian heading */}
+        <motion.p
+          ref={roHeadingRef}
+          {...fade(roHeadingIn, 0)}
+          style={{
+            ...base,
+            color: '#F5E6C8',
+            fontSize: 'clamp(1.25rem, 3vw, 1.9rem)',
+            fontFamily: 'var(--font-cinzel), "Palatino Linotype", Georgia, serif',
+            fontWeight: 700,
+            letterSpacing: '0.04em',
+            marginBottom: 'clamp(1.5rem, 3vw, 2.2rem)',
+            textShadow: '0 0 40px rgba(212,160,23,0.2)',
+          }}
+        >
+          Basarabia nu e un magazin obișnuit.
+        </motion.p>
+
+        {/* Romanian body */}
+        <motion.p
+          ref={roBodyRef}
+          {...fade(roBodyIn, 0.8)}
+          style={{
+            ...base,
+            color: '#A8957A',
+            fontSize: 'clamp(0.95rem, 1.9vw, 1.15rem)',
+            fontFamily: 'Georgia, "Times New Roman", serif',
+            marginBottom: 'clamp(2.5rem, 5vw, 3.5rem)',
+          }}
+        >
+          E un Concept Store — un loc unde măcelarul, brutarul și cofetarul lucrează sub același acoperiș.{' '}
+          Carnea o tranșăm noi. Pâinea și patiseria le facem în casă, în fiecare dimineață, după rețete autentice.
+        </motion.p>
+
+        {/* Divider */}
+        <motion.div
+          ref={dividerRef}
+          {...fade(dividerIn, 1.6)}
+          style={{ textAlign: 'center', marginBottom: 'clamp(2.5rem, 5vw, 3.5rem)' }}
+        >
+          <span style={{ color: '#D4A017', fontSize: '1rem' }}>✦</span>
+        </motion.div>
+
+        {/* English block */}
+        <motion.div ref={enBlockRef} {...fade(enBlockIn, 0)}>
+          <p style={{
+            ...base,
+            color: '#7a6a54',
+            fontSize: 'clamp(0.82rem, 1.6vw, 0.98rem)',
+            fontFamily: 'Georgia, "Times New Roman", serif',
+            marginBottom: 'clamp(0.8rem, 1.5vw, 1.1rem)',
+            fontStyle: 'italic',
+          }}>
+            Basarabia is not an ordinary shop.
+          </p>
+          <p style={{
+            ...base,
+            color: '#7a6a54',
+            fontSize: 'clamp(0.82rem, 1.6vw, 0.98rem)',
+            fontFamily: 'Georgia, "Times New Roman", serif',
+            fontStyle: 'italic',
+          }}>
+            It&apos;s a Concept Store — a place where the butcher, the baker, and the pastry chef all work under the same roof.{' '}
+            We cut our meat in-house. Our bread and pastries are made fresh every morning, from authentic traditional recipes.
+          </p>
+        </motion.div>
 
       </div>
     </section>
