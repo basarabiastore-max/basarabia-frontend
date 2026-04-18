@@ -1,13 +1,12 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function SoundToggle() {
   // Always start OFF — React state in the layout persists across SPA navigation,
   // so cross-page persistence is handled automatically without reading localStorage here.
   const [enabled, setEnabled] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const bellRef = useRef(null)
 
   useEffect(() => {
     setMounted(true)
@@ -18,16 +17,6 @@ export default function SoundToggle() {
     setEnabled(next)
     localStorage.setItem('basarabia_sound_enabled', String(next))
     window.dispatchEvent(new CustomEvent('basarabia:sound-change', { detail: { enabled: next } }))
-
-    if (next) {
-      // Play doorbell only on first click of the session (sessionStorage resets per tab)
-      if (!sessionStorage.getItem('basarabia_bell_played')) {
-        if (!bellRef.current) bellRef.current = new Audio('/doorbell.wav')
-        bellRef.current.volume = 0.7
-        bellRef.current.play().catch(() => {})
-        sessionStorage.setItem('basarabia_bell_played', 'true')
-      }
-    }
   }
 
   if (!mounted) return null

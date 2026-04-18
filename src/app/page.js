@@ -118,11 +118,9 @@ export default function Home() {
     video.muted = true
 
     // Re-apply sound state on SPA re-navigation (e.g. homepage → /shop → back).
-    // Only safe to unmute if the user has already clicked the sound button this
-    // session (sessionStorage confirms the audio context was unlocked by a gesture).
-    const soundEnabled  = localStorage.getItem('basarabia_sound_enabled') === 'true'
-    const gestureGiven  = sessionStorage.getItem('basarabia_bell_played') === 'true'
-    if (soundEnabled && gestureGiven) {
+    // basarabia_sound_enabled being true means the user has previously clicked the
+    // toggle, which counts as a prior gesture — safe to unmute programmatically.
+    if (localStorage.getItem('basarabia_sound_enabled') === 'true') {
       video.volume = 1
       video.muted  = false
     }
@@ -183,7 +181,26 @@ export default function Home() {
           autoPlay
           muted
           playsInline
-          onEnded={() => setVideoEnded(true)}
+          onEnded={() => {
+            setVideoEnded(true)
+            const video = videoRef.current
+            if (!video || video.muted) return
+            // Fade audio out over 3 seconds, then silence
+            const startVol = video.volume
+            const start    = performance.now()
+            const tick = (now) => {
+              if (!videoRef.current || videoRef.current.muted) return
+              const t = Math.min((now - start) / 3000, 1)
+              videoRef.current.volume = startVol * (1 - t)
+              if (t < 1) {
+                requestAnimationFrame(tick)
+              } else {
+                videoRef.current.muted  = true
+                videoRef.current.volume = 1
+              }
+            }
+            requestAnimationFrame(tick)
+          }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7, ease: 'easeIn' }}
