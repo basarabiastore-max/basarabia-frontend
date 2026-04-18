@@ -40,8 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Claude Code
-.claude/
+# Claude Code — ignore everything except the committed skills
+.claude/*
+!.claude/skills
 
 # Newsletter signups — local storage only, never commit emails
 /data
