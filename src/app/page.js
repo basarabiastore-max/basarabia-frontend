@@ -1,10 +1,11 @@
 'use client'
 
 import { motion, AnimatePresence, useInView } from 'framer-motion'
-import Link from 'next/link'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import { useState, useEffect, useRef } from 'react'
+import { useRouter } from 'next/navigation'
+import PantryReveal from './components/PantryReveal'
 
 // ── Typewriter variants ────────────────────────────────────────────────────
 const sentence = {
@@ -42,6 +43,8 @@ export default function Home() {
   const [videoEnded, setVideoEnded] = useState(false)
   const canvasRef = useRef(null)
   const videoRef  = useRef(null)
+  const [revealing, setRevealing] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -358,26 +361,30 @@ export default function Home() {
                 zIndex: 5,
               }}
             >
-              <Link
-                href="/shop"
+              <button
+                onClick={() => setRevealing(true)}
                 style={{
-                  textDecoration: 'none',
-                  display: 'block',
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  cursor: "pointer",
+                  textDecoration: "none",
+                  display: "block",
                   fontFamily: 'var(--font-cinzel), Georgia, "Palatino Linotype", serif',
-                  fontSize: 'clamp(1.2rem, 2.2vw, 1.7rem)',
+                  fontSize: "clamp(1.2rem, 2.2vw, 1.7rem)",
                   fontWeight: 700,
-                  color: '#F5E6C8',
-                  letterSpacing: '0.18em',
-                  textTransform: 'uppercase',
-                  whiteSpace: 'nowrap',
-                  textAlign: 'center',
+                  color: "#F5E6C8",
+                  letterSpacing: "0.18em",
+                  textTransform: "uppercase",
+                  whiteSpace: "nowrap",
+                  textAlign: "center",
                   textShadow:
-                    '0 0 30px rgba(212,160,23,0.6),' +
-                    '0 2px 8px rgba(0,0,0,0.9)',
+                    "0 0 30px rgba(212,160,23,0.6)," +
+                    "0 2px 8px rgba(0,0,0,0.9)",
                 }}
               >
                 Cumpără Acum
-              </Link>
+              </button>
               {/* Underline accent */}
               <motion.div
                 initial={{ scaleX: 0 }}
@@ -536,6 +543,10 @@ export default function Home() {
       <NewsletterSignup />
 
       <Footer />
+
+      {revealing && (
+        <PantryReveal onComplete={() => router.push("/shop")} />
+      )}
 
     </div>
   )
