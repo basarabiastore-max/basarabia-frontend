@@ -2,116 +2,7 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-
-const categories = [
-  {
-    name: 'Special Offer!',
-    ro: 'Oferte Speciale',
-    icon: '🏷️',
-    slug: 'special-offer',
-    accent: '#c0392b',
-    highlight: true,
-  },
-  {
-    name: 'NEW Products',
-    ro: 'Produse Noi',
-    icon: '✨',
-    slug: 'new-products',
-    accent: '#D4A017',
-    highlight: true,
-  },
-  {
-    name: 'Moldavian Products',
-    ro: 'Produse Moldovenești',
-    icon: '🇲🇩',
-    slug: 'moldavian-products',
-    accent: '#9b59b6',
-  },
-  {
-    name: 'International Products',
-    ro: 'Produse Internaționale',
-    icon: '🌍',
-    slug: 'international-products',
-    accent: '#1565c0',
-  },
-  {
-    name: 'Vegetables & Fruits',
-    ro: 'Legume și Fructe',
-    icon: '🥦',
-    slug: 'vegetables-fruits',
-    accent: '#27ae60',
-  },
-  {
-    name: 'General Products',
-    ro: 'Produse Generale',
-    icon: '🛒',
-    slug: 'general-products',
-    accent: '#7f8c8d',
-  },
-  {
-    name: 'Cans & Jars',
-    ro: 'Conserve și Borcane',
-    icon: '🫙',
-    slug: 'cans-jars',
-    accent: '#e67e22',
-  },
-  {
-    name: 'Spices & Flavours',
-    ro: 'Condimente și Arome',
-    icon: '🌶️',
-    slug: 'spices-flavours',
-    accent: '#e74c3c',
-  },
-  {
-    name: 'Tea & Coffee',
-    ro: 'Ceai și Cafea',
-    icon: '☕',
-    slug: 'tea-coffee',
-    accent: '#8B4513',
-  },
-  {
-    name: 'Sweets & Snacks',
-    ro: 'Dulciuri și Gustări',
-    icon: '🍫',
-    slug: 'sweets-snacks',
-    accent: '#e91e8c',
-  },
-  {
-    name: 'Dairy',
-    ro: 'Lactate',
-    icon: '🧀',
-    slug: 'dairy',
-    accent: '#f1c40f',
-  },
-  {
-    name: 'Meat Products',
-    ro: 'Produse din Carne',
-    icon: '🥩',
-    slug: 'meat-products',
-    accent: '#c0392b',
-  },
-  {
-    name: 'Cosmetics & Cleaning',
-    ro: 'Cosmetice și Curățenie',
-    icon: '🧴',
-    slug: 'cosmetics-cleaning',
-    accent: '#16a085',
-  },
-  {
-    name: 'Soft Drinks',
-    ro: 'Băuturi Răcoritoare',
-    icon: '🥤',
-    slug: 'soft-drinks',
-    accent: '#2980b9',
-  },
-  {
-    name: 'Alcohol',
-    ro: 'Alcool',
-    icon: '🍷',
-    slug: 'alcohol',
-    accent: '#8B1A1A',
-  },
-]
+import { categories } from '@/lib/categories'
 
 const containerVariants = {
   hidden: {},
@@ -351,7 +242,7 @@ function CategoryCard({ cat }) {
             letterSpacing: '0.03em',
             lineHeight: 1.3,
           }}>
-            {cat.name}
+            {cat.nameEn}
           </span>
 
           {/* Romanian name */}
@@ -362,7 +253,7 @@ function CategoryCard({ cat }) {
             fontFamily: 'Georgia, serif',
             lineHeight: 1.2,
           }}>
-            {cat.ro}
+            {cat.nameRo}
           </span>
 
           {/* Bottom accent line */}
