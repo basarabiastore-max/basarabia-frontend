@@ -21,11 +21,18 @@ const categories = [
     highlight: true,
   },
   {
-    name: 'Special Products',
-    ro: 'Produse Speciale',
-    icon: '⭐',
-    slug: 'special-products',
+    name: 'Moldavian Products',
+    ro: 'Produse Moldovenești',
+    icon: '🇲🇩',
+    slug: 'moldavian-products',
     accent: '#9b59b6',
+  },
+  {
+    name: 'International Products',
+    ro: 'Produse Internaționale',
+    icon: '🌍',
+    slug: 'international-products',
+    accent: '#1565c0',
   },
   {
     name: 'Vegetables & Fruits',
@@ -84,20 +91,6 @@ const categories = [
     accent: '#c0392b',
   },
   {
-    name: 'Ready Meals',
-    ro: 'Mâncăruri Gata',
-    icon: '🍲',
-    slug: 'ready-meals',
-    accent: '#d35400',
-  },
-  {
-    name: 'Frozen Products',
-    ro: 'Produse Congelate',
-    icon: '❄️',
-    slug: 'frozen-products',
-    accent: '#3498db',
-  },
-  {
     name: 'Cosmetics & Cleaning',
     ro: 'Cosmetice și Curățenie',
     icon: '🧴',
@@ -117,13 +110,6 @@ const categories = [
     icon: '🍷',
     slug: 'alcohol',
     accent: '#8B1A1A',
-  },
-  {
-    name: 'UK Products',
-    ro: 'Produse UK',
-    icon: '🇬🇧',
-    slug: 'uk-products',
-    accent: '#1565c0',
   },
 ]
 
