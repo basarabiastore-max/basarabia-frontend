@@ -1,8 +1,16 @@
 'use client'
 
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { categories } from '@/lib/categories'
+import {
+  CARD_BG, CARD_HERO_BG,
+  CARD_BORDER, CARD_BORDER_HOVER,
+  CARD_SHADOW, CARD_SHADOW_HOVER,
+  INNER_GLOW, INNER_GLOW_HOVER,
+  CREAM,
+} from '@/lib/brand'
 
 const containerVariants = {
   hidden: {},
@@ -175,23 +183,31 @@ export default function ShopPage() {
 }
 
 function CategoryCard({ cat }) {
+  const [hovered, setHovered] = useState(false)
+  const baseBorder = cat.highlight ? `${cat.accent}55` : CARD_BORDER
+  const hoverBorder = cat.highlight ? cat.accent : CARD_BORDER_HOVER
+  const hoverShadow = cat.highlight
+    ? `${CARD_SHADOW_HOVER}, 0 0 20px ${cat.accent}22`
+    : CARD_SHADOW_HOVER
+
   return (
     <motion.div
       variants={cardVariants}
-      whileHover="hover"
       style={{ cursor: 'pointer' }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      onTapStart={() => setHovered(true)}
+      onTap={() => setHovered(false)}
+      onTapCancel={() => setHovered(false)}
     >
       <Link
         href={`/shop/${cat.slug}`}
         style={{ textDecoration: 'none', display: 'block', height: '100%' }}
       >
         <motion.div
-          whileHover={{
-            y: -5,
-            borderColor: cat.accent,
-            boxShadow: `0 12px 40px rgba(0,0,0,0.5), 0 0 20px ${cat.accent}22`,
-          }}
-          transition={{ duration: 0.22, ease: 'easeOut' }}
+          whileHover={{ y: -2, borderColor: hoverBorder, boxShadow: hoverShadow }}
+          whileTap={{ y: -1, scale: 0.99 }}
+          transition={{ duration: 0.28, ease: 'easeOut' }}
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -199,26 +215,41 @@ function CategoryCard({ cat }) {
             justifyContent: 'center',
             gap: '0.7rem',
             padding: '2rem 1.2rem 1.8rem',
-            background: cat.highlight
-              ? `linear-gradient(145deg, rgba(45,15,5,0.95) 0%, rgba(30,12,4,0.98) 100%)`
-              : 'linear-gradient(145deg, rgba(30,12,4,0.92) 0%, rgba(18,8,3,0.96) 100%)',
-            border: cat.highlight
-              ? `1px solid ${cat.accent}55`
-              : '1px solid rgba(212,160,23,0.1)',
+            background: cat.highlight ? CARD_HERO_BG : CARD_BG,
+            border: `1px solid ${baseBorder}`,
             borderRadius: '4px',
+            boxShadow: CARD_SHADOW,
             textAlign: 'center',
             position: 'relative',
+            zIndex: 0,
             overflow: 'hidden',
             minHeight: '160px',
           }}
         >
-          {/* Highlight badge for Special Offer and NEW */}
+          {/* Inner glow — base layer */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: INNER_GLOW,
+            pointerEvents: 'none',
+            zIndex: -1,
+          }} />
+
+          {/* Inner glow — hover amplified */}
+          <motion.div
+            animate={{ opacity: hovered ? 1 : 0 }}
+            transition={{ duration: 0.28 }}
+            style={{
+              position: 'absolute', inset: 0,
+              background: INNER_GLOW_HOVER,
+              pointerEvents: 'none',
+              zIndex: -1,
+            }}
+          />
+
+          {/* Top accent strip — hero cards only */}
           {cat.highlight && (
             <div style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
+              position: 'absolute', top: 0, left: 0, right: 0,
               height: '3px',
               background: `linear-gradient(90deg, transparent, ${cat.accent}, transparent)`,
             }} />
@@ -235,7 +266,7 @@ function CategoryCard({ cat }) {
 
           {/* English name */}
           <span style={{
-            color: cat.highlight ? cat.accent : '#F5E6C8',
+            color: cat.highlight ? cat.accent : CREAM,
             fontSize: '0.85rem',
             fontWeight: 700,
             fontFamily: 'Arial, sans-serif',
@@ -258,12 +289,9 @@ function CategoryCard({ cat }) {
 
           {/* Bottom accent line */}
           <div style={{
-            position: 'absolute',
-            bottom: 0,
-            left: '50%',
+            position: 'absolute', bottom: 0, left: '50%',
             transform: 'translateX(-50%)',
-            width: '35%',
-            height: '2px',
+            width: '35%', height: '2px',
             background: `linear-gradient(to right, transparent, ${cat.accent}88, transparent)`,
           }} />
         </motion.div>

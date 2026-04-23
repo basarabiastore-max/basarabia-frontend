@@ -1,7 +1,15 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import type { Product } from '@/lib/products';
+import {
+  CARD_BG,
+  CARD_BORDER, CARD_BORDER_HOVER,
+  CARD_SHADOW, CARD_SHADOW_HOVER,
+  INNER_GLOW, INNER_GLOW_HOVER,
+  MUTED_GOLD, CREAM,
+} from '@/lib/brand';
 
 const containerVariants = {
   hidden: {},
@@ -26,27 +34,58 @@ function formatPrice(price: number | null): string {
 }
 
 function ProductCard({ product, accent }: { product: Product; accent: string }) {
+  const [hovered, setHovered] = useState(false);
   const priceLabel = formatPrice(product.priceGbp);
   const isPriceOnRequest = product.priceGbp === null;
 
   return (
-    <motion.div variants={cardVariants} style={{ cursor: 'default' }}>
+    <motion.div
+      variants={cardVariants}
+      style={{ cursor: 'default' }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      onTapStart={() => setHovered(true)}
+      onTap={() => setHovered(false)}
+      onTapCancel={() => setHovered(false)}
+    >
       <motion.div
-        whileHover={{
-          y: -5,
-          borderColor: accent,
-          boxShadow: `0 12px 40px rgba(0,0,0,0.5), 0 0 20px ${accent}22`,
-        }}
-        transition={{ duration: 0.22, ease: 'easeOut' }}
+        whileHover={{ y: -2, borderColor: CARD_BORDER_HOVER, boxShadow: CARD_SHADOW_HOVER }}
+        whileTap={{ y: -1, scale: 0.99 }}
+        transition={{ duration: 0.28, ease: 'easeOut' }}
         style={{
           display: 'flex',
           flexDirection: 'column',
-          background: 'linear-gradient(145deg, rgba(30,12,4,0.92) 0%, rgba(18,8,3,0.96) 100%)',
-          border: '1px solid rgba(212,160,23,0.1)',
+          background: CARD_BG,
+          border: `1px solid ${CARD_BORDER}`,
           borderRadius: '4px',
+          boxShadow: CARD_SHADOW,
+          position: 'relative',
+          zIndex: 0,
           overflow: 'hidden',
         }}
       >
+        {/* Inner glow — base layer */}
+        <div
+          style={{
+            position: 'absolute', inset: 0,
+            background: INNER_GLOW,
+            pointerEvents: 'none',
+            zIndex: -1,
+          }}
+        />
+
+        {/* Inner glow — hover amplified */}
+        <motion.div
+          animate={{ opacity: hovered ? 1 : 0 }}
+          transition={{ duration: 0.28 }}
+          style={{
+            position: 'absolute', inset: 0,
+            background: INNER_GLOW_HOVER,
+            pointerEvents: 'none',
+            zIndex: -1,
+          }}
+        />
+
         {/* Image placeholder */}
         <div
           style={{
@@ -56,7 +95,6 @@ function ProductCard({ product, accent }: { product: Product; accent: string }) 
             alignItems: 'center',
             justifyContent: 'center',
             borderBottom: '1px solid rgba(212,160,23,0.08)',
-            position: 'relative',
           }}
         >
           <div
@@ -75,14 +113,23 @@ function ProductCard({ product, accent }: { product: Product; accent: string }) 
         </div>
 
         {/* Card body */}
-        <div style={{ padding: '1rem 1rem 1.2rem', display: 'flex', flexDirection: 'column', gap: '0.35rem', flex: 1 }}>
-          {/* Romanian name — prominent */}
+        <div
+          style={{
+            padding: '1rem 1rem 1.2rem',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.35rem',
+            flex: 1,
+          }}
+        >
+          {/* Romanian name — Fix B: serif display font, cream */}
           <span
             style={{
-              color: '#F5E6C8',
+              color: CREAM,
               fontSize: '0.88rem',
-              fontWeight: 700,
-              fontFamily: 'Arial, sans-serif',
+              fontWeight: 600,
+              fontFamily: 'var(--font-cinzel), "Palatino Linotype", Georgia, serif',
+              letterSpacing: '0.01em',
               lineHeight: 1.35,
             }}
           >
@@ -102,7 +149,7 @@ function ProductCard({ product, accent }: { product: Product; accent: string }) 
             {product.nameEn}
           </span>
 
-          {/* Weight + supplier row */}
+          {/* Weight + supplier */}
           <div
             style={{
               display: 'flex',
@@ -112,33 +159,20 @@ function ProductCard({ product, accent }: { product: Product; accent: string }) 
               flexWrap: 'wrap',
             }}
           >
-            <span
-              style={{
-                color: '#7a6a52',
-                fontSize: '0.7rem',
-                fontFamily: 'Arial, sans-serif',
-              }}
-            >
+            <span style={{ color: '#7a6a52', fontSize: '0.7rem', fontFamily: 'Arial, sans-serif' }}>
               {product.weight}
             </span>
             <span style={{ color: '#3a2a1a', fontSize: '0.65rem' }}>·</span>
-            <span
-              style={{
-                color: '#5a4a34',
-                fontSize: '0.67rem',
-                fontFamily: 'Arial, sans-serif',
-                letterSpacing: '0.04em',
-              }}
-            >
+            <span style={{ color: '#5a4a34', fontSize: '0.67rem', fontFamily: 'Arial, sans-serif', letterSpacing: '0.04em' }}>
               {product.supplier}
             </span>
           </div>
 
-          {/* Price */}
+          {/* Price — Fix A: "Preț la comandă" uses muted gold, not error-red */}
           <div style={{ marginTop: 'auto', paddingTop: '0.7rem' }}>
             <span
               style={{
-                color: isPriceOnRequest ? '#6a5a42' : accent,
+                color: isPriceOnRequest ? MUTED_GOLD : accent,
                 fontSize: isPriceOnRequest ? '0.72rem' : '1rem',
                 fontWeight: isPriceOnRequest ? 400 : 700,
                 fontFamily: isPriceOnRequest ? 'Georgia, serif' : 'Arial, sans-serif',
