@@ -50,9 +50,12 @@ a {
   }
 
   /* ── Hero CTA ── */
+  /* Anchored 8px above the video's top edge (video has height: 60% on mobile). */
+  /* Keeps CTA off the video regardless of viewport height; avoids dark-frame */
+  /* mix-blend-mode interactions that made the CTA appear to float in a void. */
   .hero-cta {
     top: auto !important;
-    bottom: 8% !important;
+    bottom: calc(60% + 8px) !important;
     right: 0 !important;
     width: 100% !important;
     justify-content: center !important;

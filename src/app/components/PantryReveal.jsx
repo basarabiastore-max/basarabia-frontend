@@ -59,7 +59,7 @@
  */
 
 import { motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const GOLD = "#D4A017";
 const GOLD_DIM = "#8a6a10";
@@ -70,6 +70,18 @@ const BLACK = "#000000";
 const TOTAL_MS = 4200;
 
 export default function PantryReveal({ onComplete }) {
+  // Pick image variant by viewport. Desktop image is portrait-composed
+  // for landscape cropping; on mobile portrait it shows windows at top
+  // and a dark void below. Mobile variant is composed for portrait.
+  const [pantrySrc, setPantrySrc] = useState("/pantry-desktop.jpg");
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 768px)");
+    const update = () => setPantrySrc(mq.matches ? "/pantry-mobile.jpg" : "/pantry-desktop.jpg");
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
   // Fire navigation once the animation completes.
   useEffect(() => {
     const id = setTimeout(() => onComplete?.(), TOTAL_MS);
@@ -110,7 +122,7 @@ export default function PantryReveal({ onComplete }) {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: "url('/pantry-desktop.jpg')",
+            backgroundImage: `url('${pantrySrc}')`,
             backgroundSize: "cover",
             backgroundPosition: "center center",
             width: "200%",
@@ -137,7 +149,7 @@ export default function PantryReveal({ onComplete }) {
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: "url('/pantry-desktop.jpg')",
+            backgroundImage: `url('${pantrySrc}')`,
             backgroundSize: "cover",
             backgroundPosition: "center center",
             width: "200%",
