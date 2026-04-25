@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import type { Product } from '@/lib/products';
 import {
@@ -89,6 +90,7 @@ function ProductCard({ product, accent }: { product: Product; accent: string }) 
         {/* Image placeholder */}
         <div
           style={{
+            position: 'relative',
             height: '160px',
             background: 'linear-gradient(145deg, #1e1208 0%, #140d06 100%)',
             display: 'flex',
@@ -97,19 +99,29 @@ function ProductCard({ product, accent }: { product: Product; accent: string }) 
             borderBottom: '1px solid rgba(212,160,23,0.08)',
           }}
         >
-          <div
-            style={{
-              width: '80px',
-              height: '100px',
-              border: `1px solid ${accent}33`,
-              borderRadius: '2px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <span style={{ color: `${accent}66`, fontSize: '1.4rem' }}>✦</span>
-          </div>
+          {product.image ? (
+            <Image
+              src={`/products/${product.image}`}
+              alt={product.nameRo}
+              fill
+              style={{ objectFit: 'contain', padding: '12px' }}
+              sizes="200px"
+            />
+          ) : (
+            <div
+              style={{
+                width: '80px',
+                height: '100px',
+                border: `1px solid ${accent}33`,
+                borderRadius: '2px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <span style={{ color: `${accent}66`, fontSize: '1.4rem' }}>✦</span>
+            </div>
+          )}
         </div>
 
         {/* Card body */}
