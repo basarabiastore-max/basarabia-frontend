@@ -54,6 +54,7 @@ export async function POST(request) {
 
     const validationError = validateMessages(body.messages)
     if (validationError) {
+      console.error('[chat] validation failed:', validationError)
       return Response.json({ error: ERROR_MESSAGE }, { status: 400 })
     }
 
@@ -63,6 +64,12 @@ export async function POST(request) {
     }
 
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+
+    console.log('[chat] calling Anthropic API', {
+      model: 'claude-sonnet-4-5',
+      messageCount: body.messages.length,
+      sdkVersion: Anthropic?.VERSION ?? 'unknown',
+    })
 
     const response = await client.messages.create({
       model: 'claude-sonnet-4-5',
@@ -78,12 +85,31 @@ export async function POST(request) {
       .trim()
 
     if (!reply) {
+      console.error('[chat] Anthropic returned no text blocks', {
+        stop_reason: response.stop_reason,
+        content_types: response.content.map((b) => b.type),
+      })
       return Response.json({ error: ERROR_MESSAGE }, { status: 500 })
     }
 
     return Response.json({ reply })
   } catch (err) {
-    console.error('[chat] error', err)
+    if (err instanceof Anthropic.APIError) {
+      console.error('[chat] Anthropic API error', {
+        name: err.name,
+        status: err.status,
+        message: err.message,
+        error: err.error,
+        request_id: err.request_id,
+        headers: err.headers,
+      })
+    } else {
+      console.error('[chat] unexpected error', {
+        name: err?.name,
+        message: err?.message,
+        stack: err?.stack,
+      })
+    }
     return Response.json({ error: ERROR_MESSAGE }, { status: 500 })
   }
 }
