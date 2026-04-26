@@ -2,6 +2,7 @@ import { Geist, Geist_Mono, Cinzel_Decorative } from "next/font/google";
 import "./globals.css";
 import PageTransition from "./PageTransition";
 import SoundToggle from "./components/SoundToggle";
+import CookieBanner from "./components/CookieBanner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,6 +34,7 @@ export default function RootLayout({ children }) {
       <body className="min-h-full flex flex-col">
         <PageTransition>{children}</PageTransition>
         <SoundToggle />
+        <CookieBanner />
       </body>
     </html>
   );
