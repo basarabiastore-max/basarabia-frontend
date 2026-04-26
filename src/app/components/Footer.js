@@ -212,12 +212,10 @@ export default function Footer() {
             <Link href="/shop" className="footer-link">Magazin</Link>
             <Link href="/despre-noi" className="footer-link">Despre Noi</Link>
             <Link href="/contact" className="footer-link">Contact</Link>
-            {/* TODO: add real /livrare page */}
-            <a href="#" className="footer-link">Livrare</a>
-            {/* TODO: add real /termeni page */}
-            <a href="#" className="footer-link">Termeni și Condiții</a>
-            {/* TODO: add real /confidentialitate page */}
-            <a href="#" className="footer-link">Politica de Confidențialitate</a>
+            <Link href="/livrare" className="footer-link">Livrare</Link>
+            <Link href="/termeni-si-conditii" className="footer-link">Termeni și Condiții</Link>
+            <Link href="/confidentialitate" className="footer-link">Politica de Confidențialitate</Link>
+            <Link href="/cookie-uri" className="footer-link">Cookie-uri</Link>
           </nav>
         </div>
 
