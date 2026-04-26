@@ -25,7 +25,7 @@ function TermsRo() {
 
       <h2>1. Cine suntem</h2>
       <p>Acest magazin online este operat de <strong>Basarabia Ltd</strong>, companie înregistrată în Anglia și Țara Galilor sub numărul <strong>14886556</strong>, cu sediul social la Ground Floor, 11 Market Place, Spalding, Lincolnshire, PE11 1SP.</p>
-      <p>Suntem înregistrați pentru TVA cu numărul <strong>{'{{VAT_NUMBER}}'}</strong>.</p>
+      <p>Suntem înregistrați pentru TVA cu numărul <strong>&#123;&#123;VAT_NUMBER&#125;&#125;</strong>.</p>
       <p>Ne poți contacta la <a href="mailto:contact@basarabia.co.uk">contact@basarabia.co.uk</a>.</p>
       <p>În aceste condiții, „noi" înseamnă Basarabia Ltd. „Tu" înseamnă persoana care vizitează site-ul sau plasează o comandă.</p>
 
@@ -106,7 +106,7 @@ function TermsEn() {
 
       <h2>1. Who we are</h2>
       <p>This online store is operated by <strong>Basarabia Ltd</strong>, a company registered in England and Wales under company number <strong>14886556</strong>, with its registered office at Ground Floor, 11 Market Place, Spalding, Lincolnshire, PE11 1SP.</p>
-      <p>We are VAT registered under number <strong>{'{{VAT_NUMBER}}'}</strong>.</p>
+      <p>We are VAT registered under number <strong>&#123;&#123;VAT_NUMBER&#125;&#125;</strong>.</p>
       <p>You can reach us at <a href="mailto:contact@basarabia.co.uk">contact@basarabia.co.uk</a>.</p>
       <p>In these terms, &ldquo;we&rdquo; means Basarabia Ltd. &ldquo;You&rdquo; means the person visiting the site or placing an order.</p>
 

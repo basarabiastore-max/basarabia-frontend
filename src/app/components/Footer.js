@@ -267,7 +267,6 @@ export default function Footer() {
             <GooglePayIcon />
           </div>
 
-          {/* TODO: replace [TODO] with real Companies House number once registered */}
           <p className="footer-bottom-right" style={{
             color: '#3a3028',
             fontFamily: 'Georgia, serif',
@@ -275,7 +274,7 @@ export default function Footer() {
             letterSpacing: '0.1em',
             margin: 0,
           }}>
-            Basarabia Ltd · Company No. [TODO]
+            Basarabia Ltd · Company No. 14886556
           </p>
         </div>
       </div>
