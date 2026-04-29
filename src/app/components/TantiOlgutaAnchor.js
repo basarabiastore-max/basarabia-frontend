@@ -1,5 +1,7 @@
 'use client'
 
+import Image from 'next/image'
+
 export default function TantiOlgutaAnchor({ onClick }) {
   return (
     <>
@@ -44,14 +46,16 @@ export default function TantiOlgutaAnchor({ onClick }) {
           width: 40px;
           height: 40px;
           border-radius: 50%;
-          background: radial-gradient(circle at 35% 30%, #2a0e0e 0%, #0a0303 75%);
-          border: 1px solid rgba(212,160,23,0.7);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #D4A017;
-          font-size: 1rem;
-          letter-spacing: 0;
+          border: 1.5px solid rgba(212,175,55,0.5);
+          overflow: hidden;
+          background: #1a0606;
+          display: block;
+        }
+        .olguta-avatar img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
         }
         .olguta-pulse-dot {
           position: absolute;
@@ -103,9 +107,17 @@ export default function TantiOlgutaAnchor({ onClick }) {
         className="olguta-anchor"
         aria-label="Întreab-o pe Tanti Olguța — Ask Tanti Olguța"
       >
-        <span className="olguta-avatar-wrap" aria-hidden="true">
-          <span className="olguta-avatar">✦</span>
-          <span className="olguta-pulse-dot" />
+        <span className="olguta-avatar-wrap">
+          <span className="olguta-avatar">
+            <Image
+              src="/tanti-olguta-avatar.png"
+              alt="Tanti Olguța"
+              width={40}
+              height={40}
+              priority
+            />
+          </span>
+          <span className="olguta-pulse-dot" aria-hidden="true" />
         </span>
         <span className="olguta-anchor-text">
           <span className="olguta-anchor-line-ro">Întreab-o pe Tanti Olguța</span>

@@ -1,6 +1,9 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
+
+const AVATAR_SRC = '/tanti-olguta-avatar.png'
 
 export default function TantiOlgutaPanel({
   messages,
@@ -132,17 +135,21 @@ export default function TantiOlgutaPanel({
           flex-shrink: 0;
         }
         .olguta-panel-avatar {
-          width: 32px;
-          height: 32px;
+          width: 56px;
+          height: 56px;
           border-radius: 50%;
-          background: radial-gradient(circle at 35% 30%, #2a0e0e 0%, #0a0303 75%);
-          border: 1px solid rgba(212,160,23,0.7);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #D4A017;
-          font-size: 0.85rem;
+          background: #1a0606;
+          border: 1.5px solid rgba(212,175,55,0.5);
+          box-shadow: 0 0 12px rgba(212,175,55,0.25);
           flex-shrink: 0;
+          overflow: hidden;
+          display: block;
+        }
+        .olguta-panel-avatar img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
         }
         .olguta-panel-name {
           font-family: var(--font-cinzel, "Cinzel Decorative", serif);
@@ -202,8 +209,31 @@ export default function TantiOlgutaPanel({
           border-radius: 3px;
         }
 
+        .olguta-msg-row-assistant {
+          align-self: flex-start;
+          display: flex;
+          align-items: flex-end;
+          gap: 8px;
+          max-width: 92%;
+        }
+        .olguta-msg-avatar {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          border: 1.5px solid rgba(212,175,55,0.5);
+          background: #1a0606;
+          overflow: hidden;
+          flex-shrink: 0;
+          display: block;
+          margin-bottom: 2px;
+        }
+        .olguta-msg-avatar img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
         .olguta-msg {
-          max-width: 82%;
           padding: 10px 14px;
           border-radius: 14px;
           font-size: 0.92rem;
@@ -212,14 +242,15 @@ export default function TantiOlgutaPanel({
           word-wrap: break-word;
         }
         .olguta-msg-assistant {
-          align-self: flex-start;
           background: rgba(60,15,15,0.7);
           border: 1px solid rgba(212,160,23,0.18);
           color: #F5E6C8;
           border-bottom-left-radius: 4px;
+          min-width: 0;
         }
         .olguta-msg-user {
           align-self: flex-end;
+          max-width: 82%;
           background: rgba(212,160,23,0.15);
           border: 1px solid rgba(212,160,23,0.4);
           color: #F5E6C8;
@@ -227,7 +258,6 @@ export default function TantiOlgutaPanel({
         }
 
         .olguta-typing {
-          align-self: flex-start;
           padding: 10px 14px;
           display: flex;
           align-items: center;
@@ -330,7 +360,14 @@ export default function TantiOlgutaPanel({
 
       <div className="olguta-panel" role="dialog" aria-label="Tanti Olguța chat">
         <div className="olguta-panel-header">
-          <span className="olguta-panel-avatar" aria-hidden="true">✦</span>
+          <span className="olguta-panel-avatar">
+            <Image
+              src={AVATAR_SRC}
+              alt="Tanti Olguța"
+              width={56}
+              height={56}
+            />
+          </span>
           <h3 className="olguta-panel-name">Tanti Olguța</h3>
           <span className="olguta-online-text">online</span>
           <span className="olguta-online-dot" aria-hidden="true" />
@@ -343,22 +380,43 @@ export default function TantiOlgutaPanel({
         </div>
 
         <div className="olguta-conversation" ref={scrollRef}>
-          {messages.map((m, i) => (
-            <div
-              key={i}
-              className={`olguta-msg ${
-                m.role === 'user' ? 'olguta-msg-user' : 'olguta-msg-assistant'
-              }`}
-            >
-              {m.content}
-            </div>
-          ))}
+          {messages.map((m, i) =>
+            m.role === 'user' ? (
+              <div key={i} className="olguta-msg olguta-msg-user">
+                {m.content}
+              </div>
+            ) : (
+              <div key={i} className="olguta-msg-row-assistant">
+                <span className="olguta-msg-avatar">
+                  <Image
+                    src={AVATAR_SRC}
+                    alt="Tanti Olguța"
+                    width={32}
+                    height={32}
+                  />
+                </span>
+                <div className="olguta-msg olguta-msg-assistant">
+                  {m.content}
+                </div>
+              </div>
+            )
+          )}
           {isLoading && (
-            <div className="olguta-typing">
-              <span>Tanti Olguța scrie</span>
-              <span className="olguta-typing-dots">
-                <span /><span /><span />
+            <div className="olguta-msg-row-assistant">
+              <span className="olguta-msg-avatar">
+                <Image
+                  src={AVATAR_SRC}
+                  alt="Tanti Olguța"
+                  width={32}
+                  height={32}
+                />
               </span>
+              <div className="olguta-typing">
+                <span>Tanti Olguța scrie</span>
+                <span className="olguta-typing-dots">
+                  <span /><span /><span />
+                </span>
+              </div>
             </div>
           )}
         </div>
