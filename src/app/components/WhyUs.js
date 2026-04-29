@@ -1,18 +1,30 @@
 export default function WhyUs() {
   const pillars = [
-    { symbol: '✦',  title: 'Autentic',     desc: 'Produse originale direct din Patria Natala, fără compromisuri.' },
-    { symbol: '✿',  title: 'Tradițional',  desc: 'Rețete transmise din generație în generație.' },
-    { symbol: '🚚', title: 'Livrat Rapid', desc: 'Livrare rapidă la cea mai inalta calitate.' },
+    {
+      symbol: '✦',
+      ro: { title: 'Autentic',     desc: 'Produse originale direct din Patria Natala, fără compromisuri.' },
+      en: { title: 'Authentic',    desc: 'Original products straight from the homeland, no compromises.' },
+    },
+    {
+      symbol: '✿',
+      ro: { title: 'Tradițional',  desc: 'Rețete transmise din generație în generație.' },
+      en: { title: 'Traditional',  desc: 'Recipes passed down from generation to generation.' },
+    },
+    {
+      symbol: '🚚',
+      ro: { title: 'Livrat Rapid', desc: 'Livrare rapidă la cea mai inalta calitate.' },
+      en: { title: 'Fast Delivery', desc: 'Quick delivery, highest quality.' },
+    },
   ]
 
   return (
     <section style={{
       backgroundColor: '#0a0a0a',
       width: '100%',
-      padding: '60px 40px',
+      padding: 'clamp(80px, 10vw, 120px) clamp(1.5rem, 5vw, 4rem)',
     }}>
       {/* Eyebrow + title */}
-      <div style={{ textAlign: 'center', marginBottom: '70px' }}>
+      <div style={{ textAlign: 'center', marginBottom: 'clamp(50px, 8vw, 80px)' }}>
         <p style={{
           color: '#D4A017',
           fontSize: '0.7rem',
@@ -21,7 +33,7 @@ export default function WhyUs() {
           fontFamily: 'Arial, sans-serif',
           margin: '0 0 1.2rem',
         }}>
-          De Ce Noi?
+          De Ce Noi? · Why Us?
         </p>
         <div style={{
           width: '60px', height: '1px',
@@ -34,12 +46,13 @@ export default function WhyUs() {
       <div className="why-grid" style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(3, 1fr)',
-        gap: '60px',
+        gap: 'clamp(40px, 5vw, 70px)',
         maxWidth: '1100px',
         margin: '0 auto',
+        alignItems: 'start',
       }}>
         {pillars.map(item => (
-          <div key={item.title} style={{ textAlign: 'center' }}>
+          <div key={item.ro.title} style={{ textAlign: 'center' }}>
             <div style={{
               color: '#D4A017',
               fontSize: '2rem',
@@ -47,6 +60,8 @@ export default function WhyUs() {
             }}>
               {item.symbol}
             </div>
+
+            {/* RO title */}
             <h3 style={{
               color: '#F5E6C8',
               fontSize: '1.1rem',
@@ -56,17 +71,43 @@ export default function WhyUs() {
               fontWeight: 700,
               margin: '0 0 16px',
             }}>
-              {item.title}
+              {item.ro.title}
             </h3>
+
+            {/* RO desc */}
+            <p style={{
+              color: '#A8957A',
+              fontSize: '0.95rem',
+              lineHeight: 1.8,
+              fontFamily: 'Georgia, serif',
+              margin: '0 0 28px',
+            }}>
+              {item.ro.desc}
+            </p>
+
+            {/* EN title */}
+            <p style={{
+              color: '#7a6a54',
+              fontSize: '0.78rem',
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              fontFamily: 'Georgia, serif',
+              fontWeight: 700,
+              margin: '0 0 10px',
+            }}>
+              {item.en.title}
+            </p>
+
+            {/* EN desc */}
             <p style={{
               color: '#7a6a54',
               fontStyle: 'italic',
-              fontSize: '0.9rem',
-              lineHeight: 1.8,
+              fontSize: '0.85rem',
+              lineHeight: 1.7,
               fontFamily: 'Georgia, serif',
               margin: 0,
             }}>
-              {item.desc}
+              {item.en.desc}
             </p>
           </div>
         ))}
