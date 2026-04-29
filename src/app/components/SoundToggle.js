@@ -1,12 +1,14 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { usePathname } from 'next/navigation'
 
 export default function SoundToggle() {
   // Always start OFF — React state in the layout persists across SPA navigation,
   // so cross-page persistence is handled automatically without reading localStorage here.
   const [enabled, setEnabled] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     setMounted(true)
@@ -20,6 +22,8 @@ export default function SoundToggle() {
   }
 
   if (!mounted) return null
+  // Only the homepage has the Olguța hero video, so only render the toggle there.
+  if (pathname !== '/') return null
 
   return (
     <>
