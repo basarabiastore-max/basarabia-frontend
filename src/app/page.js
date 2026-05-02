@@ -121,6 +121,10 @@ export default function Home() {
     // React's `muted` prop is unreliable on video elements — set it imperatively.
     // This guarantees muted autoplay works on every browser including Safari.
     video.muted = true
+    // iOS Safari sometimes ignores the `autoPlay` attribute when React hydrates;
+    // an imperative play() after muted=true forces playback. Swallow rejections
+    // (e.g. if the browser still blocks for any reason — autoPlay attr is the fallback).
+    video.play().catch(() => {})
 
     // Re-apply sound state on SPA re-navigation (e.g. homepage → /shop → back).
     // basarabia_sound_enabled being true means the user has previously clicked the
