@@ -1,31 +1,63 @@
 import Anthropic from '@anthropic-ai/sdk'
+import { Redis } from '@upstash/redis'
+import { Ratelimit } from '@upstash/ratelimit'
 import { SYSTEM_PROMPT } from '@/lib/tantiOlguta'
 
 const ERROR_MESSAGE = 'Tanti Olguța se odihnește un moment, încearcă din nou.'
+const RATE_LIMIT_MESSAGE =
+  'Olguța se odihnește puțin. Încearcă din nou mai târziu sau scrie-ne la contact@basarabia.co.uk.'
 
 const MAX_MESSAGES = 30
 const MAX_CONTENT_CHARS = 2000
-const RATE_LIMIT = 20
-const RATE_WINDOW_MS = 60 * 60 * 1000
 
-const ipBuckets = new Map()
+// Per-IP: 20 requests / hour, sliding window. Keyed by client IP.
+const PER_IP_LIMIT = 20
+const PER_IP_WINDOW = '1 h'
+
+// Global daily circuit breaker. Caps absolute worst-case Anthropic spend.
+const DAILY_GLOBAL_CAP = 1000
+const DAILY_TTL_SECONDS = 60 * 60 * 48
+
+const hasUpstash = Boolean(
+  process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN,
+)
+
+// Lazily create on first use to avoid module-load failures when env is absent.
+const redis = hasUpstash ? Redis.fromEnv() : null
+const ratelimit = hasUpstash
+  ? new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(PER_IP_LIMIT, PER_IP_WINDOW),
+      analytics: false,
+      prefix: 'olguta:rl',
+    })
+  : null
+
+if (!hasUpstash) {
+  console.warn(
+    '[chat] UPSTASH_REDIS_REST_URL / UPSTASH_REDIS_REST_TOKEN missing — rate limit and daily cap DISABLED. Local dev only; production must set these.',
+  )
+}
 
 function getClientIp(request) {
   const forwarded = request.headers.get('x-forwarded-for')
   if (forwarded) return forwarded.split(',')[0].trim()
-  return request.headers.get('x-real-ip') || 'unknown'
+  return request.headers.get('x-real-ip') || 'anonymous'
 }
 
-function isRateLimited(ip) {
-  const now = Date.now()
-  const entry = ipBuckets.get(ip)
-  if (!entry || now > entry.resetAt) {
-    ipBuckets.set(ip, { count: 1, resetAt: now + RATE_WINDOW_MS })
-    return false
-  }
-  if (entry.count >= RATE_LIMIT) return true
-  entry.count += 1
-  return false
+function todayKey() {
+  const now = new Date()
+  const yyyy = now.getUTCFullYear()
+  const mm = String(now.getUTCMonth() + 1).padStart(2, '0')
+  const dd = String(now.getUTCDate()).padStart(2, '0')
+  return `olguta:global:${yyyy}-${mm}-${dd}`
+}
+
+function rateLimitedResponse() {
+  return Response.json(
+    { error: 'rate_limited', message: RATE_LIMIT_MESSAGE },
+    { status: 429 },
+  )
 }
 
 function validateMessages(messages) {
@@ -45,8 +77,17 @@ function validateMessages(messages) {
 export async function POST(request) {
   try {
     const ip = getClientIp(request)
-    if (isRateLimited(ip)) {
-      return Response.json({ error: ERROR_MESSAGE }, { status: 429 })
+
+    // Layer 1: per-IP sliding window
+    if (ratelimit) {
+      const { success } = await ratelimit.limit(ip)
+      if (!success) return rateLimitedResponse()
+    }
+
+    // Layer 2: global daily circuit breaker (pre-check)
+    if (redis) {
+      const currentCount = Number(await redis.get(todayKey())) || 0
+      if (currentCount >= DAILY_GLOBAL_CAP) return rateLimitedResponse()
     }
 
     const body = await request.json().catch(() => null)
@@ -73,7 +114,7 @@ export async function POST(request) {
 
     const response = await client.messages.create({
       model: 'claude-sonnet-4-5',
-      max_tokens: 600,
+      max_tokens: 300,
       system: SYSTEM_PROMPT,
       messages: body.messages,
     })
@@ -90,6 +131,17 @@ export async function POST(request) {
         content_types: response.content.map((b) => b.type),
       })
       return Response.json({ error: ERROR_MESSAGE }, { status: 500 })
+    }
+
+    // Layer 2 (continued): increment daily counter on successful response.
+    // Best-effort — if Redis hiccups here, we still return the reply rather than dropping it.
+    if (redis) {
+      try {
+        const newCount = await redis.incr(todayKey())
+        if (newCount === 1) await redis.expire(todayKey(), DAILY_TTL_SECONDS)
+      } catch (e) {
+        console.error('[chat] daily counter increment failed', e?.message)
+      }
     }
 
     return Response.json({ reply })

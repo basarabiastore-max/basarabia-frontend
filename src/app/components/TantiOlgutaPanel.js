@@ -11,6 +11,8 @@ export default function TantiOlgutaPanel({
   isLoading,
   setIsLoading,
   onClose,
+  onBeforeSend,
+  onResetCount,
 }) {
   const [input, setInput] = useState('')
   const scrollRef = useRef(null)
@@ -30,6 +32,9 @@ export default function TantiOlgutaPanel({
     const text = input.trim()
     if (!text || isLoading) return
 
+    // Per-session limit gate: Widget tracks count and shows the modal if exceeded.
+    if (onBeforeSend && !onBeforeSend()) return
+
     const userMessage = { role: 'user', content: text }
     const next = [...messages, userMessage]
     setMessages(next)
@@ -48,11 +53,14 @@ export default function TantiOlgutaPanel({
       })
       const data = await res.json()
       if (!res.ok || !data.reply) {
+        // Prefer the structured `message` (e.g. friendly rate-limit copy)
+        // over the bare `error` code so the user never sees "rate_limited".
         setMessages([
           ...next,
           {
             role: 'assistant',
             content:
+              data?.message ||
               data?.error ||
               'Tanti Olguța se odihnește un moment, încearcă din nou.',
           },
@@ -88,6 +96,7 @@ export default function TantiOlgutaPanel({
           'Bine ai venit la Basarabia, dragă! Sunt Tanti Olguța. Cu ce te pot ajuta?',
       },
     ])
+    if (onResetCount) onResetCount()
   }
 
   return (
