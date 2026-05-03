@@ -13,7 +13,7 @@ export type Product = {
 
 export const products: Product[] = [
   { sku: 'DLC-TRN-190', categorySlug: 'cans-jars', nameRo: 'Dulceață de trandafiri', nameEn: 'Rose petal preserve', supplier: 'Raureni', origin: 'RO', weight: '320g', priceGbp: 5.90, status: 'Activ', image: 'DLC-TRN-190.png' },
-  { sku: 'DLC-NUC-225', categorySlug: 'cans-jars', nameRo: 'Dulceata de nuci verzi', nameEn: 'Green walnut preserve', supplier: 'Raureni', origin: 'RO', weight: '500g', priceGbp: 4.00, status: 'Activ', image: 'DLC-NUC-225.png' },
+  { sku: 'DLC-NUC-225', categorySlug: 'cans-jars', nameRo: 'Dulceață de nuci verzi', nameEn: 'Green walnut preserve', supplier: 'Raureni', origin: 'RO', weight: '500g', priceGbp: 4.00, status: 'Activ', image: 'DLC-NUC-225.png' },
   { sku: 'DLC-TEL-400', categorySlug: 'dairy', nameRo: 'Telemea de oi', nameEn: 'Sheep\'s milk cheese', supplier: 'Tudia', origin: 'RO', weight: '400g', priceGbp: 7.60, status: 'Activ', image: null },
   { sku: 'DLC-SLM-250', categorySlug: 'meat-products', nameRo: 'Salam de Sibiu', nameEn: 'Sibiu salami', supplier: 'Salonta', origin: 'RO', weight: '250g', priceGbp: 8.60, status: 'Activ', image: null },
   { sku: 'DLC-COZ-800', categorySlug: 'sweets-snacks', nameRo: 'Cozonac cu nucă', nameEn: 'Walnut sweet bread', supplier: 'Basarabia in-house', origin: 'UK', weight: '800g', priceGbp: 4.90, status: 'Activ', image: null },

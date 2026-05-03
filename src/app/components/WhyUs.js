@@ -2,7 +2,7 @@ export default function WhyUs() {
   const pillars = [
     {
       symbol: '✦',
-      ro: { title: 'Autentic',     desc: 'Produse originale direct din Patria Natala, fără compromisuri.' },
+      ro: { title: 'Autentic',     desc: 'Produse originale direct din Patria Natală, fără compromisuri.' },
       en: { title: 'Authentic',    desc: 'Original products straight from the homeland, no compromises.' },
     },
     {
@@ -12,7 +12,7 @@ export default function WhyUs() {
     },
     {
       symbol: '🚚',
-      ro: { title: 'Livrat Rapid', desc: 'Livrare rapidă la cea mai inalta calitate.' },
+      ro: { title: 'Livrat Rapid', desc: 'Livrare rapidă la cea mai înaltă calitate.' },
       en: { title: 'Fast Delivery', desc: 'Quick delivery, highest quality.' },
     },
   ]
