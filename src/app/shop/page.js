@@ -5,8 +5,8 @@ import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { categories } from '@/lib/categories'
 import {
-  CARD_BG, CARD_HERO_BG,
-  CARD_BORDER, CARD_BORDER_HOVER,
+  CARD_HERO_BG,
+  CARD_BORDER_HOVER,
   CARD_SHADOW, CARD_SHADOW_HOVER,
   INNER_GLOW, INNER_GLOW_HOVER,
   CREAM,
@@ -182,13 +182,25 @@ export default function ShopPage() {
   )
 }
 
+// Non-featured (positions 3+) get a slightly warmer surface, a stronger
+// gold rim, and a soft gold glow on hover so they read as actual cards
+// rather than holes in the page. They stay visibly secondary to the
+// featured cards (Special Offer, NEW Products), which keep their accent
+// border, top strip, accent-coloured text and accent-coloured hover glow.
+// Brand GOLD = rgb(212,160,23) is used for the rim/glow tint.
+const NORMAL_BG =
+  'linear-gradient(135deg, rgba(40,25,15,0.6) 0%, rgba(20,12,8,0.4) 100%)'
+const NORMAL_BORDER = 'rgba(212,160,23,0.32)'
+const NORMAL_HOVER_GLOW = '0 0 22px rgba(212,160,23,0.18)'
+
 function CategoryCard({ cat }) {
   const [hovered, setHovered] = useState(false)
-  const baseBorder = cat.highlight ? `${cat.accent}55` : CARD_BORDER
+  const baseBackground = cat.highlight ? CARD_HERO_BG : NORMAL_BG
+  const baseBorder = cat.highlight ? `${cat.accent}55` : NORMAL_BORDER
   const hoverBorder = cat.highlight ? cat.accent : CARD_BORDER_HOVER
   const hoverShadow = cat.highlight
     ? `${CARD_SHADOW_HOVER}, 0 0 20px ${cat.accent}22`
-    : CARD_SHADOW_HOVER
+    : `${CARD_SHADOW_HOVER}, ${NORMAL_HOVER_GLOW}`
 
   return (
     <motion.div
@@ -215,7 +227,7 @@ function CategoryCard({ cat }) {
             justifyContent: 'center',
             gap: '0.7rem',
             padding: '2rem 1.2rem 1.8rem',
-            background: cat.highlight ? CARD_HERO_BG : CARD_BG,
+            background: baseBackground,
             border: `1px solid ${baseBorder}`,
             borderRadius: '4px',
             boxShadow: CARD_SHADOW,
