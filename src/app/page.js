@@ -190,6 +190,8 @@ export default function Home() {
           autoPlay
           muted
           playsInline
+          preload="auto"
+          poster="/olguta-poster.jpg"
           onEnded={() => {
             setVideoEnded(true)
             const video = videoRef.current
@@ -228,7 +230,8 @@ export default function Home() {
             WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 18% 100%)',
           }}
         >
-          <source src="/olguta.mp4" type="video/mp4" />
+          <source src="/olguta-compressed.webm" type="video/webm" />
+          <source src="/olguta-compressed.mp4" type="video/mp4" />
         </motion.video>
 
         {/* ── LEFT EDGE GRADIENT ─────────────────────────────────────────────── */}
