@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import type { Product } from '@/lib/products';
+
+type GridProduct = Product & { handle?: string; imageUrl?: string | null };
 import {
   CARD_BG,
   CARD_BORDER, CARD_BORDER_HOVER,
@@ -34,7 +36,7 @@ function formatPrice(price: number | null): string {
   return `£${price.toFixed(2)}`;
 }
 
-function ProductCard({ product, accent }: { product: Product; accent: string }) {
+function ProductCard({ product, accent }: { product: GridProduct; accent: string }) {
   const [hovered, setHovered] = useState(false);
   const priceLabel = formatPrice(product.priceGbp);
   const isPriceOnRequest = product.priceGbp === null;
@@ -99,7 +101,15 @@ function ProductCard({ product, accent }: { product: Product; accent: string }) 
             borderBottom: '1px solid rgba(212,160,23,0.08)',
           }}
         >
-          {product.image ? (
+          {product.imageUrl ? (
+            <Image
+              src={product.imageUrl}
+              alt={product.nameRo}
+              fill
+              style={{ objectFit: 'contain', padding: '12px' }}
+              sizes="200px"
+            />
+          ) : product.image ? (
             <Image
               src={`/products/${product.image}`}
               alt={product.nameRo}
@@ -212,7 +222,7 @@ export default function ProductGrid({
   products,
   accent,
 }: {
-  products: Product[];
+  products: GridProduct[];
   accent: string;
 }) {
   if (products.length === 0) {
@@ -248,9 +258,19 @@ export default function ProductGrid({
         gap: '1.1rem',
       }}
     >
-      {products.map((product) => (
-        <ProductCard key={product.sku} product={product} accent={accent} />
-      ))}
+      {products.map((product) =>
+        product.handle ? (
+          <a
+            key={product.sku}
+            href={`/produs/${product.handle}`}
+            style={{ textDecoration: 'none' }}
+          >
+            <ProductCard product={product} accent={accent} />
+          </a>
+        ) : (
+          <ProductCard key={product.sku} product={product} accent={accent} />
+        ),
+      )}
     </motion.div>
   );
 }

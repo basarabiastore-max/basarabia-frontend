@@ -3,6 +3,8 @@ import "./globals.css";
 import PageTransition from "./PageTransition";
 import SoundToggle from "./components/SoundToggle";
 import TantiOlgutaWidget from "./components/TantiOlgutaWidget";
+import { CartProvider } from "./components/cart/CartContext";
+import CartDrawer from "./components/cart/CartDrawer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,9 +34,12 @@ export default function RootLayout({ children }) {
       className={`${geistSans.variable} ${geistMono.variable} ${cinzelDecorative.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <PageTransition>{children}</PageTransition>
-        <SoundToggle />
-        <TantiOlgutaWidget />
+        <CartProvider>
+          <PageTransition>{children}</PageTransition>
+          <SoundToggle />
+          <TantiOlgutaWidget />
+          <CartDrawer />
+        </CartProvider>
       </body>
     </html>
   );

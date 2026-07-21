@@ -1,27 +1,13 @@
 import { notFound } from 'next/navigation';
 import { categories } from '@/lib/categories';
-import { products } from '@/lib/products';
+import { resolveCategoryProducts } from '@/lib/categoryMap';
 import ProductGrid from './ProductGrid';
 
 export const dynamicParams = false;
+export const revalidate = 300;
 
 export function generateStaticParams() {
   return categories.map((cat) => ({ slug: cat.slug }));
-}
-
-function resolveProducts(slug: string) {
-  switch (slug) {
-    case 'moldavian-products':
-      return products.filter((p) => p.origin === 'MD');
-    case 'international-products':
-      return products.filter((p) => p.origin !== 'RO' && p.origin !== 'MD');
-    case 'new-products':
-      return products.slice(-20);
-    case 'special-offer':
-      return [];
-    default:
-      return products.filter((p) => p.categorySlug === slug);
-  }
 }
 
 export default async function CategoryPage({
@@ -33,7 +19,7 @@ export default async function CategoryPage({
   const category = categories.find((c) => c.slug === slug);
   if (!category) notFound();
 
-  const categoryProducts = resolveProducts(slug);
+  const categoryProducts = await resolveCategoryProducts(slug);
 
   return (
     <div
