@@ -5,6 +5,7 @@ import SoundToggle from "./components/SoundToggle";
 import TantiOlgutaWidget from "./components/TantiOlgutaWidget";
 import { CartProvider } from "./components/cart/CartContext";
 import CartDrawer from "./components/cart/CartDrawer";
+import SearchOverlay from "./components/SearchOverlay";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({ children }) {
           <SoundToggle />
           <TantiOlgutaWidget />
           <CartDrawer />
+          <SearchOverlay />
         </CartProvider>
       </body>
     </html>
