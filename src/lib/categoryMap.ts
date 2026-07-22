@@ -6,27 +6,11 @@
 // computed from the full product list.
 
 import {
-  getCollectionProducts,
   getAllProducts,
   shopifyConfigured,
   type ShopProduct,
 } from './shopify';
 import { products as staticProducts, type Product } from './products';
-
-// Candidate Shopify collection handles per site slug. First match wins.
-const COLLECTION_CANDIDATES: Record<string, string[]> = {
-  'vegetables-fruits': ['vegetables-fruits', 'legume-si-fructe', 'vegetables-and-fruits'],
-  'general-products': ['general-products', 'produse-generale'],
-  'cans-jars': ['cans-jars', 'conserve-si-borcane', 'cans-and-jars'],
-  'spices-flavours': ['spices-flavours', 'condimente-si-arome', 'spices-and-flavours'],
-  'tea-coffee': ['tea-coffee', 'ceai-si-cafea', 'tea-and-coffee'],
-  'sweets-snacks': ['sweets-snacks', 'dulciuri-si-gustari', 'sweets-and-snacks'],
-  dairy: ['dairy', 'lactate'],
-  'meat-products': ['meat-products', 'produse-din-carne'],
-  'cosmetics-cleaning': ['cosmetics-cleaning', 'cosmetice-si-curatenie', 'cosmetics-and-cleaning'],
-  'soft-drinks': ['soft-drinks', 'bauturi-racoritoare'],
-  alcohol: ['alcohol', 'alcool'],
-};
 
 // Keywords for tag / productType fallback matching (lowercased contains).
 const KEYWORD_FALLBACK: Record<string, string[]> = {
@@ -93,13 +77,9 @@ export async function resolveCategoryProducts(slug: string): Promise<Product[]> 
       );
     }
 
-    // Real categories — try collections first
-    for (const handle of COLLECTION_CANDIDATES[slug] ?? [slug]) {
-      const fromCollection = await getCollectionProducts(handle);
-      if (fromCollection && fromCollection.length > 0) return fromCollection;
-    }
-
-    // Fallback: filter the whole catalogue by tags / productType
+    // Filter the whole catalogue by tags / productType.
+    // (Collection-first path removed: no collections exist in this store, and the
+    // probe queries poisoned Vercel's data cache with stale serve-on-error entries.)
     const all = await allProductsSafe();
     const keywords = KEYWORD_FALLBACK[slug] ?? [slug.replace(/-/g, ' ')];
     const matched = all.filter((p) => matchesKeywords(p, keywords));

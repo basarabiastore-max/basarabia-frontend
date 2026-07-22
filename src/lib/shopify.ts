@@ -19,7 +19,7 @@ type GqlResponse<T> = { data?: T; errors?: Array<{ message: string }> };
 async function shopifyFetch<T>(
   query: string,
   variables: Record<string, unknown> = {},
-  revalidate = 300,
+  revalidate = 60,
 ): Promise<T> {
   if (!domain || !token) throw new Error('Shopify env vars missing');
   const res = await fetch(`https://${domain}/api/${API_VERSION}/graphql.json`, {
