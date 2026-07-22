@@ -1,13 +1,8 @@
 import { notFound } from 'next/navigation';
 import { categories } from '@/lib/categories';
-import { resolveCategoryProducts } from '@/lib/categoryMap';
-import ProductGrid from './ProductGrid';
+import CategoryProducts from './CategoryProducts';
 
 export const dynamic = 'force-dynamic';
-
-export function generateStaticParams() {
-  return categories.map((cat) => ({ slug: cat.slug }));
-}
 
 export default async function CategoryPage({
   params,
@@ -17,8 +12,6 @@ export default async function CategoryPage({
   const { slug } = await params;
   const category = categories.find((c) => c.slug === slug);
   if (!category) notFound();
-
-  const categoryProducts = await resolveCategoryProducts(slug);
 
   return (
     <div
@@ -159,7 +152,7 @@ export default async function CategoryPage({
           />
         </div>
 
-        <ProductGrid products={categoryProducts} accent={category.accent} />
+        <CategoryProducts slug={slug} accent={category.accent} />
       </main>
 
       {/* ── FOOTER STRIP ── */}
