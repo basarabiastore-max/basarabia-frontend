@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { getProductByHandle, shopifyConfigured } from '@/lib/shopify';
 import AddToCartButton from '@/app/components/cart/AddToCartButton';
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 export default async function ProductPage({
   params,

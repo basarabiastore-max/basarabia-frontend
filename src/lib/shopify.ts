@@ -29,8 +29,7 @@ async function shopifyFetch<T>(
       'X-Shopify-Storefront-Access-Token': token,
     },
     body: JSON.stringify({ query, variables }),
-    // Next.js extends fetch with `next.revalidate`; cast keeps plain tsc happy.
-    ...({ next: { revalidate } } as Record<string, unknown>),
+    cache: 'no-store',
   });
   if (!res.ok) throw new Error(`Shopify HTTP ${res.status}`);
   const json = (await res.json()) as GqlResponse<T>;

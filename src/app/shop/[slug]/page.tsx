@@ -3,8 +3,7 @@ import { categories } from '@/lib/categories';
 import { resolveCategoryProducts } from '@/lib/categoryMap';
 import ProductGrid from './ProductGrid';
 
-export const dynamicParams = false;
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 export function generateStaticParams() {
   return categories.map((cat) => ({ slug: cat.slug }));
