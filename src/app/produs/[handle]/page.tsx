@@ -147,7 +147,22 @@ export default async function ProductPage({
             {product.priceGbp !== null ? `£${product.priceGbp.toFixed(2)}` : 'Preț la comandă'}
           </p>
 
-          {product.variantId && product.availableForSale && product.priceGbp !== null ? (
+          {product.tags?.some((t: string) => t.trim().toLowerCase() === 'in-store-only') ? (
+            <div
+              style={{
+                display: 'inline-block',
+                padding: '0.7rem 1.4rem',
+                border: '1px solid rgba(212,160,23,0.5)',
+                borderRadius: '3px',
+                color: '#D4A017',
+                fontFamily: 'Georgia, serif',
+                fontSize: '0.95rem',
+                letterSpacing: '0.05em',
+              }}
+            >
+              Disponibil doar în magazin · In Store Only
+            </div>
+          ) : product.variantId && product.availableForSale && product.priceGbp !== null ? (
             <AddToCartButton variantId={product.variantId} />
           ) : (
             <p style={{ color: '#6a5a42', fontStyle: 'italic', margin: 0 }}>

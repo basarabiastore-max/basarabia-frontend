@@ -40,6 +40,10 @@ function ProductCard({ product, accent }: { product: GridProduct; accent: string
   const [hovered, setHovered] = useState(false);
   const priceLabel = formatPrice(product.priceGbp);
   const isPriceOnRequest = product.priceGbp === null;
+  const inStoreOnly = Array.isArray((product as { tags?: string[] }).tags)
+    && ((product as { tags?: string[] }).tags as string[]).some(
+      (t) => t.trim().toLowerCase() === 'in-store-only'
+    );
 
   return (
     <motion.div
@@ -203,6 +207,24 @@ function ProductCard({ product, accent }: { product: GridProduct; accent: string
             >
               {priceLabel}
             </span>
+            {inStoreOnly && (
+              <span
+                style={{
+                  marginLeft: '0.5rem',
+                  padding: '0.14rem 0.45rem',
+                  border: '1px solid rgba(212,160,23,0.45)',
+                  borderRadius: '2px',
+                  color: MUTED_GOLD,
+                  fontSize: '0.6rem',
+                  fontFamily: 'Arial, sans-serif',
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                Doar în magazin
+              </span>
+            )}
           </div>
         </div>
 
