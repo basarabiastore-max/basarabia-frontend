@@ -276,7 +276,7 @@ export default function ProductGrid({
       animate="visible"
       style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))',
         gap: '1.1rem',
       }}
     >
