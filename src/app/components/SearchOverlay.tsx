@@ -95,15 +95,14 @@ export default function SearchOverlay() {
               }}
             />
             <motion.div
-              initial={{ opacity: 0, y: -18 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -18 }}
+              initial={{ opacity: 0, y: -18, x: '-50%' }}
+              animate={{ opacity: 1, y: 0, x: '-50%' }}
+              exit={{ opacity: 0, y: -18, x: '-50%' }}
               transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
               style={{
                 position: 'fixed',
                 top: 'clamp(1rem, 8vh, 5rem)',
                 left: '50%',
-                transform: 'translateX(-50%)',
                 width: 'min(640px, calc(100vw - 2rem))',
                 zIndex: 100,
                 fontFamily: 'Georgia, serif',

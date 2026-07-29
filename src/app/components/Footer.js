@@ -259,6 +259,20 @@ export default function Footer() {
             © 2026 Basarabia Concept Store · Spalding, UK
           </p>
 
+          <p style={{
+            color: '#4a3f30',
+            fontFamily: 'Georgia, serif',
+            fontSize: '0.68rem',
+            fontStyle: 'italic',
+            letterSpacing: '0.06em',
+            margin: 0,
+            width: '100%',
+            textAlign: 'center',
+            order: 10,
+          }}>
+            Prețurile de pe website pot diferi față de cele din magazin. · Online prices may differ from in-store prices.
+          </p>
+
           {/* Payment badges */}
           <div className="footer-payment-badges" aria-label="Accepted payment methods">
             <VisaIcon />

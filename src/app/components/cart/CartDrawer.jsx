@@ -189,16 +189,37 @@ export default function CartDrawer() {
                         )}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <p
-                          style={{
-                            color: CREAM,
-                            fontSize: '0.82rem',
-                            margin: '0 0 0.3rem',
-                            lineHeight: 1.35,
-                          }}
-                        >
-                          {line.title}
-                        </p>
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem' }}>
+                          <p
+                            style={{
+                              color: CREAM,
+                              fontSize: '0.82rem',
+                              margin: '0 0 0.3rem',
+                              lineHeight: 1.35,
+                              flex: 1,
+                            }}
+                          >
+                            {line.title}
+                          </p>
+                          <button
+                            disabled={busy}
+                            onClick={() => updateLine(line.id, 0)}
+                            aria-label="Elimină produsul"
+                            title="Elimină"
+                            style={{
+                              background: 'none',
+                              border: 'none',
+                              color: '#6a5a42',
+                              fontSize: '1rem',
+                              cursor: 'pointer',
+                              lineHeight: 1,
+                              padding: '0 0.1rem',
+                              flexShrink: 0,
+                            }}
+                          >
+                            ×
+                          </button>
+                        </div>
                         <div
                           style={{
                             display: 'flex',
@@ -294,6 +315,26 @@ export default function CartDrawer() {
                   >
                     Finalizează comanda
                   </a>
+                  <button
+                    onClick={() => setOpen(false)}
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      textAlign: 'center',
+                      background: 'none',
+                      color: '#A8957A',
+                      padding: '0.7rem 1rem',
+                      marginTop: '0.6rem',
+                      borderRadius: '3px',
+                      fontFamily: 'Georgia, serif',
+                      letterSpacing: '0.05em',
+                      fontSize: '0.85rem',
+                      border: '1px solid rgba(212,160,23,0.25)',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    ← Continuă cumpărăturile
+                  </button>
                   <p
                     style={{
                       color: '#4a3a28',
