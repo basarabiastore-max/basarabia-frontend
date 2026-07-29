@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import TantiOlgutaAnchor from './TantiOlgutaAnchor'
+import { useCart } from './cart/CartContext'
 import TantiOlgutaPanel from './TantiOlgutaPanel'
 import TantiOlgutaLimitModal from './TantiOlgutaLimitModal'
 
@@ -19,6 +20,7 @@ const GREETING = {
 
 export default function TantiOlgutaWidget() {
   const pathname = usePathname()
+  const { open: cartOpen } = useCart()
   const [mounted, setMounted] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState([GREETING])
@@ -84,6 +86,8 @@ export default function TantiOlgutaWidget() {
 
   if (!mounted) return null
   if (pathname === '/') return null
+
+  if (cartOpen) return null
 
   return (
     <>
