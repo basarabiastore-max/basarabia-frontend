@@ -39,7 +39,7 @@ function formatPrice(price: number | null): string {
 
 function ProductCard({ product, accent }: { product: GridProduct; accent: string }) {
   const [hovered, setHovered] = useState(false);
-  const { add, busy } = useCart() as unknown as { add: (variantId: string, quantity?: number) => Promise<unknown>; busy: boolean };
+  const { add, busy } = useCart() as unknown as { add: (variantId: string, quantity?: number, openDrawer?: boolean) => Promise<unknown>; busy: boolean };
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const canQuickAdd = Boolean(
@@ -52,7 +52,7 @@ function ProductCard({ product, accent }: { product: GridProduct; accent: string
     e.preventDefault();
     e.stopPropagation();
     if (!product.variantId) return;
-    await add(product.variantId, qty);
+    await add(product.variantId, qty, false);
     setAdded(true);
     setQty(1);
     setTimeout(() => setAdded(false), 1600);

@@ -16,7 +16,7 @@ export function CartProvider({ children }) {
       .catch(() => {});
   }, []);
 
-  const add = useCallback(async (variantId, quantity = 1) => {
+  const add = useCallback(async (variantId, quantity = 1, openDrawer = true) => {
     setBusy(true);
     try {
       const r = await fetch('/api/cart', {
@@ -27,7 +27,7 @@ export function CartProvider({ children }) {
       const d = await r.json();
       if (d.cart) {
         setCart(d.cart);
-        setOpen(true);
+        if (openDrawer) setOpen(true);
       }
       return d;
     } finally {
