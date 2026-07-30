@@ -11,7 +11,7 @@ export default function WhyUs() {
       en: { title: 'Traditional',  desc: 'Recipes passed down from generation to generation.' },
     },
     {
-      symbol: '🚚',
+      symbol: '❂',
       ro: { title: 'Livrat Rapid', desc: 'Livrare rapidă la cea mai înaltă calitate.' },
       en: { title: 'Fast Delivery', desc: 'Quick delivery, highest quality.' },
     },
