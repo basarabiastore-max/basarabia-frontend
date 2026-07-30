@@ -335,6 +335,30 @@ export default function CartDrawer() {
                   >
                     ← Continuă cumpărăturile
                   </button>
+                  <button
+                    onClick={async () => {
+                      for (const l of cart.lines) {
+                        await updateLine(l.id, 0);
+                      }
+                    }}
+                    disabled={busy}
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      textAlign: 'center',
+                      background: 'none',
+                      border: 'none',
+                      color: '#6a5a42',
+                      padding: '0.55rem 1rem 0',
+                      fontFamily: 'Georgia, serif',
+                      fontSize: '0.78rem',
+                      letterSpacing: '0.04em',
+                      cursor: 'pointer',
+                      textDecoration: 'underline',
+                    }}
+                  >
+                    Golește coșul
+                  </button>
                   <p
                     style={{
                       color: '#4a3a28',

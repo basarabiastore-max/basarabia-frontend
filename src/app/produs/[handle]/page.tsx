@@ -5,6 +5,25 @@ import AddToCartButton from '@/app/components/cart/AddToCartButton';
 
 export const dynamic = 'force-dynamic';
 
+
+const TYPE_TO_CATEGORY: Array<[RegExp, string, string]> = [
+  [/dairy|lactate/i, 'dairy', 'Lactate'],
+  [/meat|carne|carnati|mezel/i, 'meat-products', 'Produse din Carne'],
+  [/sweet|snack|dulciuri/i, 'sweets-snacks', 'Dulciuri și Gustări'],
+  [/spice|condiment/i, 'spices-flavours', 'Condimente și Arome'],
+  [/tea|coffee|ceai|cafea/i, 'tea-coffee', 'Ceai și Cafea'],
+  [/can|jar|conserv|borcan/i, 'cans-jars', 'Conserve și Borcane'],
+  [/soft drink|racoritoare|drink|bautur/i, 'soft-drinks', 'Băuturi Răcoritoare'],
+  [/alcohol|alcool|wine|beer|vin|bere/i, 'alcohol', 'Alcool'],
+  [/vegetable|fruit|legume|fructe/i, 'vegetables-fruits', 'Legume și Fructe'],
+  [/cosmetic|cleaning|curatenie/i, 'cosmetics-cleaning', 'Cosmetice și Curățenie'],
+];
+function categoryOf(productType: string | undefined, tags: string[] | undefined): { slug: string; name: string } {
+  const hay = `${productType ?? ''} ${(tags ?? []).join(' ')}`;
+  for (const [re, slug, name] of TYPE_TO_CATEGORY) if (re.test(hay)) return { slug, name };
+  return { slug: 'general-products', name: 'Produse Generale' };
+}
+
 export default async function ProductPage({
   params,
 }: {
@@ -14,6 +33,7 @@ export default async function ProductPage({
   if (!shopifyConfigured()) notFound();
 
   const product = await getProductByHandle(handle).catch(() => null);
+  const cat = categoryOf(product?.productType, product?.tags);
   if (!product) notFound();
 
   const accent = '#D4A017';
@@ -33,7 +53,7 @@ export default async function ProductPage({
         }}
       >
         <a
-          href="/shop"
+          href={`/shop/${cat.slug}`}
           style={{
             color: '#A8957A',
             fontFamily: 'Arial, sans-serif',
@@ -43,7 +63,7 @@ export default async function ProductPage({
             textDecoration: 'none',
           }}
         >
-          ← Magazin
+          ← Înapoi la {cat.name}
         </a>
       </header>
 
@@ -51,7 +71,7 @@ export default async function ProductPage({
         style={{
           maxWidth: '1100px',
           margin: '0 auto',
-          padding: 'clamp(2rem, 5vw, 4rem) clamp(1.5rem, 5vw, 4rem)',
+          padding: 'clamp(2rem, 5vw, 4rem) clamp(1.5rem, 5vw, 4rem) 8rem',
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
           gap: 'clamp(2rem, 4vw, 4rem)',
