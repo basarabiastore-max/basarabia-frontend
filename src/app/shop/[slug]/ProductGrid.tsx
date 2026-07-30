@@ -4,8 +4,9 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import type { Product } from '@/lib/products';
+import { useCart } from '../../components/cart/CartContext';
 
-type GridProduct = Product & { handle?: string; imageUrl?: string | null };
+type GridProduct = Product & { handle?: string; imageUrl?: string | null; variantId?: string | null; availableForSale?: boolean; tags?: string[] };
 import {
   CARD_BG,
   CARD_BORDER, CARD_BORDER_HOVER,
@@ -38,6 +39,29 @@ function formatPrice(price: number | null): string {
 
 function ProductCard({ product, accent }: { product: GridProduct; accent: string }) {
   const [hovered, setHovered] = useState(false);
+  const { add, busy } = useCart() as unknown as { add: (variantId: string, quantity?: number) => Promise<unknown>; busy: boolean };
+  const [qty, setQty] = useState(1);
+  const [added, setAdded] = useState(false);
+  const canQuickAdd = Boolean(
+    product.variantId &&
+    product.availableForSale !== false &&
+    product.priceGbp !== null &&
+    !(product.tags ?? []).some((t) => t.trim().toLowerCase() === 'in-store-only')
+  );
+  const quickAdd = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!product.variantId) return;
+    await add(product.variantId, qty);
+    setAdded(true);
+    setQty(1);
+    setTimeout(() => setAdded(false), 1600);
+  };
+  const step = (e: React.MouseEvent, d: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setQty((q) => Math.min(99, Math.max(1, q + d)));
+  };
   const priceLabel = formatPrice(product.priceGbp);
   const isPriceOnRequest = product.priceGbp === null;
   const inStoreOnly = Array.isArray((product as { tags?: string[] }).tags)
@@ -224,6 +248,45 @@ function ProductCard({ product, accent }: { product: GridProduct; accent: string
               >
                 Doar în magazin
               </span>
+            )}
+            {canQuickAdd && (
+              <div
+                style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '0.55rem' }}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+              >
+                <button
+                  aria-label="Scade"
+                  onClick={(e) => step(e, -1)}
+                  disabled={busy || qty <= 1}
+                  style={{ background: 'none', border: '1px solid rgba(212,160,23,0.35)', color: CREAM, width: '1.9rem', height: '1.9rem', borderRadius: '3px', cursor: 'pointer', fontSize: '1rem', lineHeight: 1 }}
+                >−</button>
+                <span style={{ minWidth: '1.6rem', textAlign: 'center', color: CREAM, fontSize: '0.9rem', fontFamily: 'Georgia, serif' }}>{qty}</span>
+                <button
+                  aria-label="Crește"
+                  onClick={(e) => step(e, 1)}
+                  disabled={busy}
+                  style={{ background: 'none', border: '1px solid rgba(212,160,23,0.35)', color: CREAM, width: '1.9rem', height: '1.9rem', borderRadius: '3px', cursor: 'pointer', fontSize: '1rem', lineHeight: 1 }}
+                >+</button>
+                <button
+                  onClick={quickAdd}
+                  disabled={busy}
+                  style={{
+                    flex: 1,
+                    background: added ? 'rgba(39,174,96,0.25)' : 'linear-gradient(145deg, #8B1A1A 0%, #6d1414 100%)',
+                    color: added ? '#7ee2a8' : '#F5E6C8',
+                    border: '1px solid rgba(212,160,23,0.3)',
+                    borderRadius: '3px',
+                    height: '1.9rem',
+                    fontSize: '0.72rem',
+                    letterSpacing: '0.05em',
+                    cursor: busy ? 'wait' : 'pointer',
+                    whiteSpace: 'nowrap',
+                    padding: '0 0.5rem',
+                  }}
+                >
+                  {added ? '✓ În coș' : busy ? '…' : 'Adaugă'}
+                </button>
+              </div>
             )}
           </div>
         </div>
