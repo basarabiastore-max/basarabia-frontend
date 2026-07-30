@@ -273,6 +273,27 @@ export default function Footer() {
             Prețurile de pe website pot diferi față de cele din magazin. · Online prices may differ from in-store prices.
           </p>
 
+          <p style={{
+            color: '#4a3f30',
+            fontFamily: 'Arial, sans-serif',
+            fontSize: '0.66rem',
+            letterSpacing: '0.08em',
+            margin: 0,
+            width: '100%',
+            textAlign: 'center',
+            order: 11,
+          }}>
+            Website powered &amp; developed by{' '}
+            <a
+              href="https://zalmoxis.ai"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: '#8a7a5f', textDecoration: 'none', letterSpacing: '0.1em' }}
+            >
+              ZALMOXIS TECHNOLOGIES
+            </a>
+          </p>
+
           {/* Payment badges */}
           <div className="footer-payment-badges" aria-label="Accepted payment methods">
             <VisaIcon />
