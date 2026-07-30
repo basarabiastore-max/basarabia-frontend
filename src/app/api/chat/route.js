@@ -2,6 +2,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { Redis } from '@upstash/redis'
 import { Ratelimit } from '@upstash/ratelimit'
 import { SYSTEM_PROMPT } from '@/lib/tantiOlguta'
+import { getAllProducts, shopifyConfigured } from '@/lib/shopify'
 
 const ERROR_MESSAGE = 'Tanti Olguța se odihnește un moment, încearcă din nou.'
 const RATE_LIMIT_MESSAGE =
@@ -60,6 +61,59 @@ function rateLimitedResponse() {
   )
 }
 
+
+// ── Live stock lookup (RAG) ─────────────────────────────────────────────
+const STOPWORDS = new Set([
+  'aveti', 'avem', 'este', 'sunt', 'care', 'cat', 'cata', 'cati', 'cate',
+  'costa', 'pret', 'pretul', 'vreau', 'doresc', 'unde', 'cum', 'buna',
+  'ziua', 'draga', 'tanti', 'olguta', 'pentru', 'the', 'you', 'have',
+  'much', 'price', 'what', 'does', 'and', 'sau', 'ceva', 'niste', 'mai',
+])
+
+function normText(s) {
+  return (s || '')
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+}
+
+async function liveStockBlock(lastUserMessage) {
+  try {
+    if (!shopifyConfigured()) return ''
+    const words = normText(lastUserMessage)
+      .split(/[^a-z0-9]+/)
+      .filter((w) => w.length >= 3 && !STOPWORDS.has(w))
+    if (words.length === 0) return ''
+
+    const all = await getAllProducts()
+    const scored = []
+    for (const p of all) {
+      const hay = normText(`${p.nameRo} ${p.supplier} ${p.productType} ${p.tags.join(' ')}`)
+      let hits = 0
+      for (const w of words) if (hay.includes(w)) hits++
+      if (hits > 0) scored.push([hits, p])
+    }
+    if (scored.length === 0) {
+      return '\n\nSTOC LIVE: (nimic găsit în catalog pentru termenii din mesaj — nu inventa produse)'
+    }
+    scored.sort((a, b) => b[0] - a[0])
+    const lines = scored.slice(0, 10).map(([, p]) => {
+      const inStoreOnly = p.tags.some((t) => t.trim().toLowerCase() === 'in-store-only')
+      const price = p.priceGbp !== null ? `£${p.priceGbp.toFixed(2)}` : 'preț la tejghea'
+      const avail = inStoreOnly
+        ? 'doar în magazin'
+        : p.availableForSale
+          ? 'în stoc online'
+          : 'Epuizat'
+      return `- ${p.nameRo} — ${price} — ${avail} — /produs/${p.handle}`
+    })
+    return '\n\nSTOC LIVE (rezultate reale din catalog pentru mesajul clientului — folosește DOAR astea pentru stoc/prețuri):\n' + lines.join('\n')
+  } catch (e) {
+    console.error('[chat] liveStockBlock failed', e?.message)
+    return ''
+  }
+}
+
 function validateMessages(messages) {
   if (!Array.isArray(messages)) return 'messages must be an array'
   if (messages.length === 0) return 'messages must not be empty'
@@ -106,6 +160,9 @@ export async function POST(request) {
 
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
+    const lastUser = [...body.messages].reverse().find((m) => m.role === 'user')
+    const stockBlock = await liveStockBlock(lastUser?.content || '')
+
     console.log('[chat] calling Anthropic API', {
       model: 'claude-sonnet-4-5',
       messageCount: body.messages.length,
@@ -114,8 +171,8 @@ export async function POST(request) {
 
     const response = await client.messages.create({
       model: 'claude-sonnet-4-5',
-      max_tokens: 300,
-      system: SYSTEM_PROMPT,
+      max_tokens: 450,
+      system: SYSTEM_PROMPT + stockBlock,
       messages: body.messages,
     })
 
