@@ -60,7 +60,7 @@ export default function SearchOverlay() {
           position: 'fixed',
           bottom: '5.2rem',
           left: '1.4rem',
-          zIndex: 60,
+          zIndex: 110,
           width: '54px',
           height: '54px',
           borderRadius: '50%',
@@ -90,7 +90,7 @@ export default function SearchOverlay() {
                 position: 'fixed',
                 inset: 0,
                 background: 'rgba(0,0,0,0.72)',
-                zIndex: 90,
+                zIndex: 120,
                 backdropFilter: 'blur(3px)',
               }}
             />
@@ -104,7 +104,7 @@ export default function SearchOverlay() {
                 top: 'clamp(1rem, 8vh, 5rem)',
                 left: '50%',
                 width: 'min(640px, calc(100vw - 2rem))',
-                zIndex: 100,
+                zIndex: 125,
                 fontFamily: 'Georgia, serif',
               }}
             >

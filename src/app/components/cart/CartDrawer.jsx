@@ -20,7 +20,7 @@ export default function CartDrawer() {
           position: 'fixed',
           bottom: '1.4rem',
           left: '1.4rem',
-          zIndex: 60,
+          zIndex: 110,
           width: '54px',
           height: '54px',
           borderRadius: '50%',
@@ -73,7 +73,7 @@ export default function CartDrawer() {
                 position: 'fixed',
                 inset: 0,
                 background: 'rgba(0,0,0,0.6)',
-                zIndex: 70,
+                zIndex: 120,
               }}
             />
             {/* Drawer */}
@@ -90,7 +90,7 @@ export default function CartDrawer() {
                 width: 'min(420px, 100vw)',
                 background: 'linear-gradient(180deg, #1a0a05 0%, #110604 100%)',
                 borderLeft: '1px solid rgba(212,160,23,0.25)',
-                zIndex: 80,
+                zIndex: 130,
                 display: 'flex',
                 flexDirection: 'column',
                 fontFamily: 'Georgia, serif',

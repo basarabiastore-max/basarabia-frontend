@@ -119,7 +119,7 @@ export default function TantiOlgutaPanel({
           position: fixed;
           bottom: calc(24px + env(safe-area-inset-bottom));
           right: calc(24px + env(safe-area-inset-right));
-          z-index: 95;
+          z-index: 115;
           width: 380px;
           height: 540px;
           max-height: calc(100vh - 48px);

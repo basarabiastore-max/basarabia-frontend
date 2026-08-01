@@ -41,6 +41,9 @@ a {
     transform: none !important;
     object-fit: cover !important;
     object-position: 50% 30% !important;
+    mix-blend-mode: normal !important;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
   }
 
   /* ── Hero text ── */
