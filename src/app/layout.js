@@ -26,6 +26,23 @@ const cinzelDecorative = Cinzel_Decorative({
 export const metadata = {
   title: "Basarabia Concept Store — Eastern European Grocery, Spalding UK",
   description: "Your taste of Eastern Europe, right here in Spalding. Authentic Romanian, Moldovan and Eastern European groceries delivered with heart.",
+  manifest: "/manifest.json",
+  icons: {
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+  },
+  appleWebApp: {
+    capable: true,
+  },
+  other: {
+    // `appleWebApp.capable` emits only the standardised `mobile-web-app-capable`
+    // in Next 16; older iOS still reads the legacy Apple-prefixed name.
+    "apple-mobile-web-app-capable": "yes",
+  },
+};
+
+// themeColor belongs to the viewport export — deprecated in `metadata` since Next 14.
+export const viewport = {
+  themeColor: "#000000",
 };
 
 export default function RootLayout({ children }) {
