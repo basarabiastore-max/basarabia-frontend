@@ -6,6 +6,7 @@ import TantiOlgutaWidget from "./components/TantiOlgutaWidget";
 import { CartProvider } from "./components/cart/CartContext";
 import CartDrawer from "./components/cart/CartDrawer";
 import SearchOverlay from "./components/SearchOverlay";
+import InstallPrompt from "./components/InstallPrompt";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -58,6 +59,7 @@ export default function RootLayout({ children }) {
           <TantiOlgutaWidget />
           <CartDrawer />
           <SearchOverlay />
+          <InstallPrompt />
         </CartProvider>
       </body>
     </html>
