@@ -20,8 +20,9 @@ export default function InstallPrompt() {
     setIsIos(ios);
 
     if (ios) {
-      // iOS nu are beforeinstallprompt — arătăm butonul cu instrucțiuni
-      setShow(true);
+      // iOS nu are beforeinstallprompt — arătăm butonul cu instrucțiuni,
+      // dar doar pe homepage, ca să nu aglomerăm restul paginilor
+      if (window.location.pathname === "/") setShow(true);
       return;
     }
 
@@ -61,7 +62,7 @@ export default function InstallPrompt() {
       <div
         style={{
           position: "fixed",
-          bottom: "1.4rem",
+          bottom: "7rem",
           right: "1.4rem",
           zIndex: 110,
           display: "flex",
