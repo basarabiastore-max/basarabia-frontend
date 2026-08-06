@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { categories } from '@/lib/categories'
+import CampaignBanner from '../components/CampaignBanner'
 import {
   CARD_HERO_BG,
   CARD_BORDER_HOVER,
@@ -120,6 +121,7 @@ export default function ShopPage() {
       {/* ── MAIN CONTENT ─────────────────────────────────────────────────────── */}
       <main style={{ maxWidth: '1300px', margin: '0 auto', padding: 'clamp(2.5rem, 5vw, 4rem) clamp(1.5rem, 5vw, 4rem)' }}>
 
+        <CampaignBanner />
         {/* Section intro */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
